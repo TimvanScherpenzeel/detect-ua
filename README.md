@@ -7,12 +7,39 @@
 
 A small user-agent detection library (< 1kB).
 
+Is able to differentiate between mobile, tablet and desktop devices and finds your browser name and version.
+
 ## Installation
 
 Make sure you have [Node.js](http://nodejs.org/) installed.
 
 ```sh
  $ npm install detect-ua
+```
+
+## Usage
+
+```js
+import { DetectUA } from 'detect-ua';
+
+const agent = new DetectUA();
+
+console.log(agent.browser); // -> { name: Safari, version: 9.0 }
+console.log(agent.isMobile); // -> true
+console.log(agent.isTablet); // -> false
+console.log(agent.isDesktop); // -> false
+```
+
+## Development
+
+```sh
+$ yarn start
+
+$ yarn lint
+
+$ yarn test
+
+$ yarn build
 ```
 
 ## Licence
