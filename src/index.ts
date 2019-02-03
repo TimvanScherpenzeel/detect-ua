@@ -50,13 +50,14 @@ export class DetectUA {
 
       if (
         // Default mobile
-        (!this.isTablet && /[^-]mobi/i.test(this.userAgent)) ||
-        // iPhone / iPod
-        (iOSDevice === 'iphone' || iOSDevice === 'ipod') ||
-        // Android
-        (!/like android/i.test(this.userAgent) && /android/i.test(this.userAgent)) ||
-        // Nexus mobile
-        /nexus\s*[0-6]\s*/i.test(this.userAgent)
+        !this.isTablet &&
+        (/[^-]mobi/i.test(this.userAgent) ||
+          // iPhone / iPod
+          (iOSDevice === 'iphone' || iOSDevice === 'ipod') ||
+          // Android
+          (!/like android/i.test(this.userAgent) && /android/i.test(this.userAgent)) ||
+          // Nexus mobile
+          /nexus\s*[0-6]\s*/i.test(this.userAgent))
       ) {
         this.cache.set('isMobile', true);
 
