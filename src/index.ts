@@ -102,7 +102,6 @@ export class DetectUA {
       if (/opera/i.test(this.userAgent)) {
         // Opera
         result = {
-          isOpera: true,
           name: 'Opera',
           version:
             versionIdentifier || this.getFirstMatch(/(?:opera|opr|opios)[\s\/](\d+(\.\d+)?)/i),
@@ -110,71 +109,61 @@ export class DetectUA {
       } else if (/opr\/|opios/i.test(this.userAgent)) {
         // Opera
         result = {
-          isOpera: true,
           name: 'Opera',
           version: this.getFirstMatch(/(?:opr|opios)[\s\/](\d+(\.\d+)?)/i) || versionIdentifier,
         };
       } else if (/SamsungBrowser/i.test(this.userAgent)) {
         // Samsung Browser
         result = {
-          isSamsungBrowser: true,
-          name: 'Samsung Browser',
+          name: 'Samsung Internet for Android',
           version:
             versionIdentifier || this.getFirstMatch(/(?:SamsungBrowser)[\s\/](\d+(\.\d+)?)/i),
         };
       } else if (/yabrowser/i.test(this.userAgent)) {
         // Yandex Browser
         result = {
-          isYandexBrowser: true,
           name: 'Yandex Browser',
           version: versionIdentifier || this.getFirstMatch(/(?:yabrowser)[\s\/](\d+(\.\d+)?)/i),
         };
       } else if (/ucbrowser/i.test(this.userAgent)) {
         // UC Browser
         result = {
-          isUCBrowser: true,
           name: 'UC Browser',
           version: this.getFirstMatch(/(?:ucbrowser)[\s\/](\d+(?:\.\d+)+)/i),
         };
       } else if (/msie|trident/i.test(this.userAgent)) {
         // Internet Explorer
         result = {
-          isInternetExplorer: true,
           name: 'Internet Explorer',
           version: this.getFirstMatch(/(?:msie |rv:)(\d+(\.\d+)?)/i),
         };
       } else if (/edg([ea]|ios)/i.test(this.userAgent)) {
         // Edge
         result = {
-          isEdge: true,
           name: 'Microsoft Edge',
           version: this.getSecondMatch(/edg([ea]|ios)\/(\d+(\.\d+)?)/i),
         };
       } else if (/firefox|iceweasel|fxios/i.test(this.userAgent)) {
         // Firefox
         result = {
-          isFirefox: true,
           name: 'Firefox',
           version: this.getFirstMatch(/(?:firefox|iceweasel|fxios)[ \/](\d+(\.\d+)?)/i),
         };
       } else if (/chromium/i.test(this.userAgent)) {
         // Chromium
         result = {
-          isChromium: true,
           name: 'Chromium',
           version: this.getFirstMatch(/(?:chromium)[\s\/](\d+(?:\.\d+)?)/i) || versionIdentifier,
         };
       } else if (/chrome|crios|crmo/i.test(this.userAgent)) {
         // Chrome
         result = {
-          isChrome: true,
           name: 'Chrome',
           version: this.getFirstMatch(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i),
         };
       } else if (/safari|applewebkit/i.test(this.userAgent)) {
         // Safari
         result = {
-          isSafari: true,
           name: 'Safari',
           version: versionIdentifier,
         };
