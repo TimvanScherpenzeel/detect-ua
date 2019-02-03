@@ -1,7 +1,8 @@
 export class DetectUA {
   public userAgent: string;
 
-  private cache: Map<string, boolean | { [s: string]: boolean | string | number }>;
+  // Internal cache, prevents from doing the same computations twice
+  private cache: Map<string, boolean | { [s: string]: boolean | string | number }> = new Map();
 
   /**
    * Detect a users browser, browser version and wheter it is a mobile-, tablet- or desktop device.
@@ -14,8 +15,6 @@ export class DetectUA {
       : window && window.navigator
       ? window.navigator.userAgent
       : '';
-
-    this.cache = new Map();
   }
 
   /**
@@ -47,15 +46,17 @@ export class DetectUA {
     if (cached) {
       return cached;
     } else {
+      const iOSDevice = this.firstMatch(/(iphone|ipod)/i).toLowerCase();
+
       if (
         // Default mobile
         (!this.isTablet && /[^-]mobi/i.test(this.userAgent)) ||
-        // iPhone / iPad
-        (this.firstMatch(/(ipod|iphone)/i).toLowerCase() === 'iphone' || 'ipod') ||
+        // iPhone / iPod
+        (iOSDevice === 'iphone' || iOSDevice === 'ipod') ||
         // Android
-        ((!/like android/i.test(this.userAgent) && /android/i.test(this.userAgent)) ||
-          // Nexus mobile
-          /nexus\s*[0-6]\s*/i.test(this.userAgent))
+        (!/like android/i.test(this.userAgent) && /android/i.test(this.userAgent)) ||
+        // Nexus mobile
+        /nexus\s*[0-6]\s*/i.test(this.userAgent)
       ) {
         this.cache.set('isMobile', true);
 
@@ -77,15 +78,19 @@ export class DetectUA {
     if (cached) {
       return cached;
     } else {
+      const iOSDevice = this.firstMatch(/(ipad)/i).toLowerCase();
+
       if (
         // Default tablet
         (/tablet/i.test(this.userAgent) && !/tablet pc/i.test(this.userAgent)) ||
         // iPad
-        this.firstMatch(/ipad/i).toLowerCase() === 'ipad' ||
+        iOSDevice === 'ipad' ||
         // Android
-        ((!/like android/i.test(this.userAgent) && !/[^-]mobi/i.test(this.userAgent)) ||
-          // Nexus tablet
-          (!/nexus\s*[0-6]\s*/i.test(this.userAgent) && /nexus\s*[0-9]+/i.test(this.userAgent)))
+        (!/like android/i.test(this.userAgent) &&
+          /android/i.test(this.userAgent) &&
+          !/[^-]mobi/i.test(this.userAgent)) ||
+        // Nexus tablet
+        (!/nexus\s*[0-6]\s*/i.test(this.userAgent) && /nexus\s*[0-9]+/i.test(this.userAgent))
       ) {
         this.cache.set('isTablet', true);
 
