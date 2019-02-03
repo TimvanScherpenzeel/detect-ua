@@ -1,6 +1,6 @@
 export class DetectUA {
+  public userAgent: string;
   private matchCache: Map<string, boolean>;
-  private userAgent: string;
 
   constructor(forceUserAgent?: string) {
     this.matchCache = new Map();
@@ -10,8 +10,6 @@ export class DetectUA {
       ? window.navigator.userAgent
       : ''
     ).toLowerCase();
-
-    console.log(forceUserAgent, this.userAgent);
   }
 
   private match(entry: string, pattern: RegExp) {
