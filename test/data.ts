@@ -908,6 +908,64 @@ export const USER_AGENT_STRINGS: any = {
       },
     },
   ],
+  'UC Browser': [
+    {
+      ua:
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 9_0_1 like Mac OS X en-US) AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/13A405 UCBrowser/10.4.0.693 Mobile',
+      // tslint:disable-next-line:object-literal-sort-keys
+      spec: {
+        browser: {
+          name: 'UC Browser',
+          version: '10.4.0.693',
+        },
+        os: {
+          name: 'iOS',
+          version: '9.0.1',
+        },
+        platform: {
+          type: 'mobile',
+          vendor: 'Apple',
+          // tslint:disable-next-line:object-literal-sort-keys
+          model: 'iPhone',
+        },
+        // tslint:disable-next-line:object-literal-sort-keys
+        engine: {
+          name: 'WebKit',
+          version: '537.51.1',
+        },
+      },
+    },
+    {
+      ua:
+        'Mozilla/5.0 (Linux; U; Android 6.0.1; en-US; SM-G930F Build/MMB29K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 UCBrowser/11.3.2.960 U3/0.8.0 Mobile Safari/534.30',
+      // tslint:disable-next-line:object-literal-sort-keys
+      spec: {
+        browser: {
+          name: 'UC Browser',
+          version: '11.3.2.960',
+        },
+        os: {
+          name: 'Android',
+          version: '6.0.1',
+        },
+      },
+    },
+    {
+      ua:
+        'Mozilla/5.0 (Linux; U; Android 8.0.0; en-US; SM-G965F Build/R16NW) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 UCBrowser/11.3.8.976 U3/0.8.0 Mobile Safari/534.30',
+      // tslint:disable-next-line:object-literal-sort-keys
+      spec: {
+        browser: {
+          name: 'UC Browser',
+          version: '11.3.8.976',
+        },
+        os: {
+          name: 'Android',
+          version: '8.0.0',
+        },
+      },
+    },
+  ],
   'Yandex Browser': [
     {
       ua:

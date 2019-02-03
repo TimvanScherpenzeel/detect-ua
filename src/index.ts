@@ -160,7 +160,7 @@ export class DetectUA {
         // UC Browser
         result = {
           name: 'UC Browser',
-          version: this.firstMatch(/(?:ucbrowser)[\s\/](\d+(?:\.\d+)+)/i),
+          version: this.firstMatch(/(?:ucbrowser)[\s\/](\d+(\.\d+)?)/i),
         };
       } else if (/msie|trident/i.test(this.userAgent)) {
         // Internet Explorer
