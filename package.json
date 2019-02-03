@@ -1,0 +1,65 @@
+{
+  "name": "detect-ua",
+  "version": "0.0.1",
+  "description": "A small user-agent detection library.",
+  "main": "dist/detect-ua.cjs.js",
+  "browser": "dist/detect-ua.umd.js",
+  "module": "dist/detect-ua.esm.js",
+  "jsnext:main": "dist/detect-ua.esm.js",
+  "scripts": {
+    "start": "rollup -c rollup.config.ts -w",
+    "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
+    "test": "jest --verbose=false",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "prebuild": "rimraf dist docs",
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts",
+    "postbuild": "typedoc --out docs --target es5 --theme minimal --hideGenerator"
+  },
+  "author": "Tim van Scherpenzeel",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^23.3.10",
+    "jest": "^23.6.0",
+    "prettier": "^1.15.3",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.67.3",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-filesize": "^5.0.1",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-typescript2": "^0.18.0",
+    "rollup-plugin-uglify": "^6.0.0",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.17.0",
+    "typedoc": "^0.13.0",
+    "typescript": "^3.2.1"
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "printWidth": 100
+  },
+  "jest": {
+    "testURL": "http://localhost",
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "tsx"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "**/test/*.+(ts|tsx|js)"
+    ],
+    "testPathIgnorePatterns": [
+      "/test/data.ts"
+    ],
+    "preset": "ts-jest"
+  }
+}
