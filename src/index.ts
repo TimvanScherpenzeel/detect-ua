@@ -3,6 +3,11 @@ export class DetectUA {
 
   private cache: Map<string, boolean | { [s: string]: boolean | string | number }>;
 
+  /**
+   * Detect a users browser, browser version and wheter it is a mobile-, tablet- or desktop device.
+   *
+   * @param forceUserAgent Force a user agent string (useful for testing)
+   */
   constructor(forceUserAgent?: string) {
     this.userAgent = forceUserAgent
       ? forceUserAgent
@@ -13,16 +18,29 @@ export class DetectUA {
     this.cache = new Map();
   }
 
+  /**
+   * Match the first entry in the matched string
+   *
+   * @param pattern regular expression pattern
+   */
   private firstMatch(pattern: RegExp) {
     const match = this.userAgent.match(pattern);
     return (match && match.length > 1 && match[1]) || '';
   }
 
+  /**
+   * Match the second entry in the matched string
+   *
+   * @param pattern regular expression pattern
+   */
   private secondMatch(pattern: RegExp) {
     const match = this.userAgent.match(pattern);
     return (match && match.length > 1 && match[2]) || '';
   }
 
+  /**
+   * Returns if the device is a mobile device
+   */
   get isMobile() {
     const cached = this.cache.get('isMobile');
 
@@ -50,6 +68,9 @@ export class DetectUA {
     }
   }
 
+  /**
+   * Returns if the device is a tablet device
+   */
   get isTablet() {
     const cached = this.cache.get('isTablet');
 
@@ -77,6 +98,9 @@ export class DetectUA {
     }
   }
 
+  /**
+   * Returns if the device is a desktop device
+   */
   get isDesktop() {
     const cached = this.cache.get('isDesktop');
 
@@ -90,6 +114,9 @@ export class DetectUA {
     }
   }
 
+  /**
+   * Returns the browser name and version
+   */
   get browser() {
     const cached = this.cache.get('browser');
 
