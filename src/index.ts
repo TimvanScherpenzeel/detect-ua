@@ -45,11 +45,11 @@ export class DetectUA {
   }
 
   get isEdge() {
-    return this.match('isEdge', /edge/i);
+    return this.match('isEdge', /(edge|edgios|edga)\/((\d+)?[\w\.]+)/i);
   }
 
   get isInternetExplorer() {
-    return this.match('isInternetExplorer', /msie |trident/i);
+    return this.match('isInternetExplorer', /msie |(trident).+rv[:\s]([\w\.]+).+like\sgecko/i);
   }
 
   get isOpera() {
