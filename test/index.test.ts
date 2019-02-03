@@ -29,12 +29,14 @@ describe('DetectUA', () => {
 
         const UA = new DetectUA(entry.ua);
 
-        expect(UA.browser).toEqual({
+        const result = {
           name: entry.spec.browser.name,
           version: entry.spec.browser.version
             ? entry.spec.browser.version.match(/[^.]*.[^.]*/g, '')[0] // Match the first two (71.63, major.minor)
             : '',
-        });
+        };
+
+        expect(UA.browser).toEqual(result);
       });
     });
   });

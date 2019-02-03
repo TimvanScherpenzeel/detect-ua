@@ -957,6 +957,7 @@ export const USER_AGENT_STRINGS: any = {
       },
     },
   ],
+  // tslint:disable-next-line:object-literal-sort-keys
   Safari: [
     {
       ua:

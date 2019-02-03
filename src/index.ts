@@ -13,12 +13,12 @@ export class DetectUA {
     this.cache = new Map();
   }
 
-  private getFirstMatch(pattern: RegExp) {
+  private firstMatch(pattern: RegExp) {
     const match = this.userAgent.match(pattern);
     return (match && match.length > 1 && match[1]) || '';
   }
 
-  private getSecondMatch(pattern: RegExp) {
+  private secondMatch(pattern: RegExp) {
     const match = this.userAgent.match(pattern);
     return (match && match.length > 1 && match[2]) || '';
   }
@@ -33,7 +33,7 @@ export class DetectUA {
         // Default mobile
         (!this.isTablet && /[^-]mobi/i.test(this.userAgent)) ||
         // iPhone / iPad
-        (this.getFirstMatch(/(ipod|iphone)/i).toLowerCase() === 'iphone' || 'ipod') ||
+        (this.firstMatch(/(ipod|iphone)/i).toLowerCase() === 'iphone' || 'ipod') ||
         // Android
         ((!/like android/i.test(this.userAgent) && /android/i.test(this.userAgent)) ||
           // Nexus mobile
@@ -60,7 +60,7 @@ export class DetectUA {
         // Default tablet
         (/tablet/i.test(this.userAgent) && !/tablet pc/i.test(this.userAgent)) ||
         // iPad
-        this.getFirstMatch(/ipad/i).toLowerCase() === 'ipad' ||
+        this.firstMatch(/ipad/i).toLowerCase() === 'ipad' ||
         // Android
         ((!/like android/i.test(this.userAgent) && !/[^-]mobi/i.test(this.userAgent)) ||
           // Nexus tablet
@@ -96,70 +96,68 @@ export class DetectUA {
     if (cached) {
       return cached;
     } else {
-      const versionIdentifier = this.getFirstMatch(/version\/(\d+(\.\d+)?)/i);
+      const versionIdentifier = this.firstMatch(/version\/(\d+(\.\d+)?)/i);
       let result;
 
       if (/opera/i.test(this.userAgent)) {
         // Opera
         result = {
           name: 'Opera',
-          version:
-            versionIdentifier || this.getFirstMatch(/(?:opera|opr|opios)[\s\/](\d+(\.\d+)?)/i),
+          version: versionIdentifier || this.firstMatch(/(?:opera|opr|opios)[\s\/](\d+(\.\d+)?)/i),
         };
       } else if (/opr\/|opios/i.test(this.userAgent)) {
         // Opera
         result = {
           name: 'Opera',
-          version: this.getFirstMatch(/(?:opr|opios)[\s\/](\d+(\.\d+)?)/i) || versionIdentifier,
+          version: this.firstMatch(/(?:opr|opios)[\s\/](\d+(\.\d+)?)/i) || versionIdentifier,
         };
       } else if (/SamsungBrowser/i.test(this.userAgent)) {
         // Samsung Browser
         result = {
           name: 'Samsung Internet for Android',
-          version:
-            versionIdentifier || this.getFirstMatch(/(?:SamsungBrowser)[\s\/](\d+(\.\d+)?)/i),
+          version: versionIdentifier || this.firstMatch(/(?:SamsungBrowser)[\s\/](\d+(\.\d+)?)/i),
         };
       } else if (/yabrowser/i.test(this.userAgent)) {
         // Yandex Browser
         result = {
           name: 'Yandex Browser',
-          version: versionIdentifier || this.getFirstMatch(/(?:yabrowser)[\s\/](\d+(\.\d+)?)/i),
+          version: versionIdentifier || this.firstMatch(/(?:yabrowser)[\s\/](\d+(\.\d+)?)/i),
         };
       } else if (/ucbrowser/i.test(this.userAgent)) {
         // UC Browser
         result = {
           name: 'UC Browser',
-          version: this.getFirstMatch(/(?:ucbrowser)[\s\/](\d+(?:\.\d+)+)/i),
+          version: this.firstMatch(/(?:ucbrowser)[\s\/](\d+(?:\.\d+)+)/i),
         };
       } else if (/msie|trident/i.test(this.userAgent)) {
         // Internet Explorer
         result = {
           name: 'Internet Explorer',
-          version: this.getFirstMatch(/(?:msie |rv:)(\d+(\.\d+)?)/i),
+          version: this.firstMatch(/(?:msie |rv:)(\d+(\.\d+)?)/i),
         };
       } else if (/edg([ea]|ios)/i.test(this.userAgent)) {
         // Edge
         result = {
           name: 'Microsoft Edge',
-          version: this.getSecondMatch(/edg([ea]|ios)\/(\d+(\.\d+)?)/i),
+          version: this.secondMatch(/edg([ea]|ios)\/(\d+(\.\d+)?)/i),
         };
       } else if (/firefox|iceweasel|fxios/i.test(this.userAgent)) {
         // Firefox
         result = {
           name: 'Firefox',
-          version: this.getFirstMatch(/(?:firefox|iceweasel|fxios)[ \/](\d+(\.\d+)?)/i),
+          version: this.firstMatch(/(?:firefox|iceweasel|fxios)[ \/](\d+(\.\d+)?)/i),
         };
       } else if (/chromium/i.test(this.userAgent)) {
         // Chromium
         result = {
           name: 'Chromium',
-          version: this.getFirstMatch(/(?:chromium)[\s\/](\d+(?:\.\d+)?)/i) || versionIdentifier,
+          version: this.firstMatch(/(?:chromium)[\s\/](\d+(?:\.\d+)?)/i) || versionIdentifier,
         };
       } else if (/chrome|crios|crmo/i.test(this.userAgent)) {
         // Chrome
         result = {
           name: 'Chrome',
-          version: this.getFirstMatch(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i),
+          version: this.firstMatch(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i),
         };
       } else if (/safari|applewebkit/i.test(this.userAgent)) {
         // Safari
@@ -170,8 +168,8 @@ export class DetectUA {
       } else {
         // Everything else
         result = {
-          name: this.getFirstMatch(/^(.*)\/(.*) /),
-          version: this.getSecondMatch(/^(.*)\/(.*) /),
+          name: this.firstMatch(/^(.*)\/(.*) /),
+          version: this.secondMatch(/^(.*)\/(.*) /),
         };
       }
 
