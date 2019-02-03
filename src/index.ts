@@ -18,7 +18,7 @@ export class DetectUA {
   }
 
   /**
-   * Match the first entry in the matched string
+   * Match the first entry found in the user-agent string
    *
    * @param pattern regular expression pattern
    */
@@ -28,7 +28,7 @@ export class DetectUA {
   }
 
   /**
-   * Match the second entry in the matched string
+   * Match the second entry found in the user-agent string
    *
    * @param pattern regular expression pattern
    */
