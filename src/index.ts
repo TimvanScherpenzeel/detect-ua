@@ -1,5 +1,6 @@
 export class DetectUA {
   public userAgent: string;
+
   private cache: Map<string, boolean | { [s: string]: boolean | string | number }>;
 
   constructor(forceUserAgent?: string) {
