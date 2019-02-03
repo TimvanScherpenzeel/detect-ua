@@ -32,7 +32,7 @@ describe('DetectUA', () => {
         expect(UA.browser).toEqual({
           name: entry.spec.browser.name,
           version: entry.spec.browser.version
-            ? entry.spec.browser.version.match(/[^.]*.[^.]*/g, '')[0]
+            ? entry.spec.browser.version.match(/[^.]*.[^.]*/g, '')[0] // Match the first two (71.63, major.minor)
             : '',
         });
       });
