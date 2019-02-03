@@ -24,7 +24,7 @@ import { DetectUA } from 'detect-ua';
 
 const agent = new DetectUA();
 
-console.log(agent.browser); // -> { name: Safari, version: 9.0 }
+console.log(agent.browser); // -> { name: Safari, version: 11.0 }
 console.log(agent.isMobile); // -> true
 console.log(agent.isTablet); // -> false
 console.log(agent.isDesktop); // -> false
