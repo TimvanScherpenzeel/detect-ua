@@ -187,6 +187,7 @@ export class DetectUA {
       }
 
       this.cache.set('browser', result);
+
       return result;
     }
   }
