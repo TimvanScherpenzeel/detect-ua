@@ -14,7 +14,8 @@
     "test:coverage": "jest --coverage",
     "prebuild": "rimraf dist docs",
     "build": "tsc --module commonjs && rollup -c rollup.config.ts",
-    "postbuild": "typedoc --out docs --target es5 --theme minimal --hideGenerator"
+    "postbuild": "typedoc --out docs --target es5 --theme minimal --hideGenerator",
+    "deploy": "npm run build && npm version patch && npm publish && git push origin"
   },
   "author": "Tim van Scherpenzeel",
   "license": "MIT",
