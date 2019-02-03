@@ -5,7 +5,7 @@
 [![dependencies](https://david-dm.org/timvanscherpenzeel/detect-ua.svg)](https://david-dm.org/timvanscherpenzeel/detect-ua)
 [![devDependencies](https://david-dm.org/timvanscherpenzeel/detect-ua/dev-status.svg)](https://david-dm.org/timvanscherpenzeel/detect-ua#info=devDependencies)
 
-A small user-agent detection library.
+A small user-agent detection library (< 1kB).
 
 ## Installation
 
