@@ -5,7 +5,7 @@
 [![dependencies](https://david-dm.org/timvanscherpenzeel/detect-ua.svg)](https://david-dm.org/timvanscherpenzeel/detect-ua)
 [![devDependencies](https://david-dm.org/timvanscherpenzeel/detect-ua/dev-status.svg)](https://david-dm.org/timvanscherpenzeel/detect-ua#info=devDependencies)
 
-A small user-agent detection library (956 B).
+A small user-agent detection library (931 B).
 
 Is able to differentiate between mobile, tablet and desktop devices and finds your browser name and version.
 
