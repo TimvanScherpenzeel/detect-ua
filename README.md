@@ -1,6 +1,5 @@
 # Detect user-agent
 
-![](http://img.badgesize.io/TimvanScherpenzeel/detect-ua/master/dist/detect-ua.umd.js.svg?compression=gzip&maxAge=60)
 [![npm version](https://badge.fury.io/js/detect-ua.svg)](https://badge.fury.io/js/detect-ua)
 [![dependencies](https://david-dm.org/timvanscherpenzeel/detect-ua.svg)](https://david-dm.org/timvanscherpenzeel/detect-ua)
 [![devDependencies](https://david-dm.org/timvanscherpenzeel/detect-ua/dev-status.svg)](https://david-dm.org/timvanscherpenzeel/detect-ua#info=devDependencies)
