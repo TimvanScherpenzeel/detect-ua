@@ -22,12 +22,12 @@ Make sure you have [Node.js](http://nodejs.org/) installed.
 ```js
 import { DetectUA } from 'detect-ua';
 
-const agent = new DetectUA();
+const device = new DetectUA();
 
-console.log(agent.browser); // -> { name: Safari, version: 11.0 }
-console.log(agent.isMobile); // -> true
-console.log(agent.isTablet); // -> false
-console.log(agent.isDesktop); // -> false
+console.log(device.browser); // -> { name: Safari, version: 11.0 }
+console.log(device.isMobile); // -> true
+console.log(device.isTablet); // -> false
+console.log(device.isDesktop); // -> false
 ```
 
 ## Development
