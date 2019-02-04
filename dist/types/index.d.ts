@@ -8,17 +8,11 @@ export declare class DetectUA {
      */
     constructor(forceUserAgent?: string);
     /**
-     * Match the first entry found in the user-agent string
+     * Match entry based on position found in the user-agent string
      *
      * @param pattern regular expression pattern
      */
-    private firstMatch;
-    /**
-     * Match the second entry found in the user-agent string
-     *
-     * @param pattern regular expression pattern
-     */
-    private secondMatch;
+    private match;
     /**
      * Returns if the device is a mobile device
      */
