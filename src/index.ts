@@ -1,6 +1,9 @@
 export class DetectUA {
   public userAgent: string;
 
+  private android: boolean;
+  private iOS: string;
+
   // Internal cache, prevents from doing the same computations twice
   private cache: Map<string, boolean | { [s: string]: boolean | string | number }> = new Map();
 
@@ -15,6 +18,9 @@ export class DetectUA {
       : window && window.navigator
       ? window.navigator.userAgent
       : '';
+
+    this.android = !/like android/i.test(this.userAgent) && /android/i.test(this.userAgent);
+    this.iOS = this.match(1, /(iphone|ipod|ipad)/i).toLowerCase();
   }
 
   /**
@@ -36,16 +42,14 @@ export class DetectUA {
     if (cached) {
       return cached;
     } else {
-      const iOSDevice = this.match(1, /(iphone|ipod)/i).toLowerCase();
-
       if (
         // Default mobile
         !this.isTablet &&
         (/[^-]mobi/i.test(this.userAgent) ||
           // iPhone / iPod
-          (iOSDevice === 'iphone' || iOSDevice === 'ipod') ||
+          (this.iOS === 'iphone' || this.iOS === 'ipod') ||
           // Android
-          (!/like android/i.test(this.userAgent) && /android/i.test(this.userAgent)) ||
+          this.android ||
           // Nexus mobile
           /nexus\s*[0-6]\s*/i.test(this.userAgent))
       ) {
@@ -69,17 +73,13 @@ export class DetectUA {
     if (cached) {
       return cached;
     } else {
-      const iOSDevice = this.match(1, /(ipad)/i).toLowerCase();
-
       if (
         // Default tablet
         (/tablet/i.test(this.userAgent) && !/tablet pc/i.test(this.userAgent)) ||
         // iPad
-        iOSDevice === 'ipad' ||
+        this.iOS === 'ipad' ||
         // Android
-        (!/like android/i.test(this.userAgent) &&
-          /android/i.test(this.userAgent) &&
-          !/[^-]mobi/i.test(this.userAgent)) ||
+        (this.android && !/[^-]mobi/i.test(this.userAgent)) ||
         // Nexus tablet
         (!/nexus\s*[0-6]\s*/i.test(this.userAgent) && /nexus\s*[0-9]+/i.test(this.userAgent))
       ) {
@@ -107,6 +107,46 @@ export class DetectUA {
       this.cache.set('isDesktop', result);
 
       return result;
+    }
+  }
+
+  /**
+   * Returns if the device is an iOS device
+   */
+  get isiOS() {
+    const cached = this.cache.get('isiOS');
+
+    if (cached) {
+      return cached;
+    } else {
+      if (this.iOS) {
+        return {
+          name: 'iOS',
+          version: this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.'),
+        };
+      } else {
+        return false;
+      }
+    }
+  }
+
+  /**
+   * Returns if the device is an Android device
+   */
+  get isAndroid() {
+    const cached = this.cache.get('isAndroid');
+
+    if (cached) {
+      return cached;
+    } else {
+      if (this.android) {
+        return {
+          name: 'Android',
+          version: this.match(1, /android[ \/-](\d+(\.\d+)*)/i),
+        };
+      } else {
+        return false;
+      }
     }
   }
 

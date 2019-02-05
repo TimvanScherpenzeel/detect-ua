@@ -1,11 +1,11 @@
 # Detect user-agent
 
-![](http://img.badgesize.io/TimvanScherpenzeel/detect-ua/master/dist/detect-ua.umd.js.svg?compression=gzip&maxAge=60)
+![](http://img.badgesize.io/TimvanScherpenzeel/detect-ua/master/dist/detect-ua.cjs.js.svg?compression=gzip&maxAge=60)
 [![npm version](https://badge.fury.io/js/detect-ua.svg)](https://badge.fury.io/js/detect-ua)
 [![dependencies](https://david-dm.org/timvanscherpenzeel/detect-ua.svg)](https://david-dm.org/timvanscherpenzeel/detect-ua)
 [![devDependencies](https://david-dm.org/timvanscherpenzeel/detect-ua/dev-status.svg)](https://david-dm.org/timvanscherpenzeel/detect-ua#info=devDependencies)
 
-A small user-agent detection library (931 B).
+A small user-agent detection library (974 B).
 
 Is able to differentiate between mobile, tablet and desktop devices and finds your browser name and version.
 
@@ -28,6 +28,8 @@ console.log(device.browser); // -> { name: Safari, version: 11.0 }
 console.log(device.isMobile); // -> true
 console.log(device.isTablet); // -> false
 console.log(device.isDesktop); // -> false
+console.log(device.isAndroid); // -> false
+console.log(device.isiOS); // -> true
 ```
 
 ## Development

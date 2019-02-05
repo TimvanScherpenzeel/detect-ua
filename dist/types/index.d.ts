@@ -1,5 +1,7 @@
 export declare class DetectUA {
     userAgent: string;
+    private android;
+    private iOS;
     private cache;
     /**
      * Detect a users browser, browser version and wheter it is a mobile-, tablet- or desktop device.
@@ -29,6 +31,18 @@ export declare class DetectUA {
      * Returns if the device is a desktop device
      */
     readonly isDesktop: boolean | {
+        [s: string]: string | number | boolean;
+    };
+    /**
+     * Returns if the device is an iOS device
+     */
+    readonly isiOS: boolean | {
+        [s: string]: string | number | boolean;
+    };
+    /**
+     * Returns if the device is an Android device
+     */
+    readonly isAndroid: boolean | {
         [s: string]: string | number | boolean;
     };
     /**
