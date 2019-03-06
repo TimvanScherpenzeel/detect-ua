@@ -18,37 +18,34 @@ export declare class DetectUA {
     /**
      * Returns if the device is a mobile device
      */
-    readonly isMobile: boolean | {
-        [s: string]: string | number | boolean;
-    };
+    readonly isMobile: boolean;
     /**
      * Returns if the device is a tablet device
      */
-    readonly isTablet: boolean | {
-        [s: string]: string | number | boolean;
-    };
+    readonly isTablet: boolean;
     /**
      * Returns if the device is a desktop device
      */
-    readonly isDesktop: boolean | {
-        [s: string]: string | number | boolean;
-    };
+    readonly isDesktop: boolean;
     /**
      * Returns if the device is an iOS device
      */
-    readonly isiOS: boolean | {
-        [s: string]: string | number | boolean;
-    };
+    readonly isiOS: {
+        name: string;
+        version: string;
+    } | boolean;
     /**
      * Returns if the device is an Android device
      */
-    readonly isAndroid: boolean | {
-        [s: string]: string | number | boolean;
-    };
+    readonly isAndroid: {
+        name: string;
+        version: string;
+    } | boolean;
     /**
      * Returns the browser name and version
      */
-    readonly browser: true | {
-        [s: string]: string | number | boolean;
-    };
+    readonly browser: {
+        name: string;
+        version: string;
+    } | boolean;
 }

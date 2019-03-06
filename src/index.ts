@@ -5,7 +5,7 @@ export class DetectUA {
   private iOS: string;
 
   // Internal cache, prevents from doing the same computations twice
-  private cache: Map<string, boolean | { [s: string]: boolean | string | number }> = new Map();
+  private cache: Map<string, any> = new Map();
 
   /**
    * Detect a users browser, browser version and wheter it is a mobile-, tablet- or desktop device.
@@ -36,7 +36,7 @@ export class DetectUA {
   /**
    * Returns if the device is a mobile device
    */
-  get isMobile() {
+  get isMobile(): boolean {
     const cached = this.cache.get('isMobile');
 
     if (cached) {
@@ -67,7 +67,7 @@ export class DetectUA {
   /**
    * Returns if the device is a tablet device
    */
-  get isTablet() {
+  get isTablet(): boolean {
     const cached = this.cache.get('isTablet');
 
     if (cached) {
@@ -97,7 +97,7 @@ export class DetectUA {
   /**
    * Returns if the device is a desktop device
    */
-  get isDesktop() {
+  get isDesktop(): boolean {
     const cached = this.cache.get('isDesktop');
 
     if (cached) {
@@ -113,7 +113,7 @@ export class DetectUA {
   /**
    * Returns if the device is an iOS device
    */
-  get isiOS() {
+  get isiOS(): { name: string; version: string } | boolean {
     const cached = this.cache.get('isiOS');
 
     if (cached) {
@@ -133,7 +133,7 @@ export class DetectUA {
   /**
    * Returns if the device is an Android device
    */
-  get isAndroid() {
+  get isAndroid(): { name: string; version: string } | boolean {
     const cached = this.cache.get('isAndroid');
 
     if (cached) {
@@ -153,7 +153,7 @@ export class DetectUA {
   /**
    * Returns the browser name and version
    */
-  get browser() {
+  get browser(): { name: string; version: string } | boolean {
     const cached = this.cache.get('browser');
 
     if (cached) {
