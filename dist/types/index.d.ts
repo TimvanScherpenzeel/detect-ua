@@ -1,5 +1,7 @@
 export declare class DetectUA {
     userAgent: string;
+    private android;
+    private iOS;
     private cache;
     /**
      * Detect a users browser, browser version and wheter it is a mobile-, tablet- or desktop device.
@@ -8,17 +10,11 @@ export declare class DetectUA {
      */
     constructor(forceUserAgent?: string);
     /**
-     * Match the first entry found in the user-agent string
+     * Match entry based on position found in the user-agent string
      *
      * @param pattern regular expression pattern
      */
-    private firstMatch;
-    /**
-     * Match the second entry found in the user-agent string
-     *
-     * @param pattern regular expression pattern
-     */
-    private secondMatch;
+    private match;
     /**
      * Returns if the device is a mobile device
      */
@@ -35,6 +31,18 @@ export declare class DetectUA {
      * Returns if the device is a desktop device
      */
     readonly isDesktop: boolean | {
+        [s: string]: string | number | boolean;
+    };
+    /**
+     * Returns if the device is an iOS device
+     */
+    readonly isiOS: boolean | {
+        [s: string]: string | number | boolean;
+    };
+    /**
+     * Returns if the device is an Android device
+     */
+    readonly isAndroid: boolean | {
         [s: string]: string | number | boolean;
     };
     /**

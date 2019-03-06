@@ -14,24 +14,17 @@ var DetectUA = /** @class */ (function () {
             : window && window.navigator
                 ? window.navigator.userAgent
                 : '';
+        this.android = !/like android/i.test(this.userAgent) && /android/i.test(this.userAgent);
+        this.iOS = this.match(1, /(iphone|ipod|ipad)/i).toLowerCase();
     }
     /**
-     * Match the first entry found in the user-agent string
+     * Match entry based on position found in the user-agent string
      *
      * @param pattern regular expression pattern
      */
-    DetectUA.prototype.firstMatch = function (pattern) {
+    DetectUA.prototype.match = function (position, pattern) {
         var match = this.userAgent.match(pattern);
-        return (match && match.length > 1 && match[1]) || '';
-    };
-    /**
-     * Match the second entry found in the user-agent string
-     *
-     * @param pattern regular expression pattern
-     */
-    DetectUA.prototype.secondMatch = function (pattern) {
-        var match = this.userAgent.match(pattern);
-        return (match && match.length > 1 && match[2]) || '';
+        return (match && match.length > 1 && match[position]) || '';
     };
     Object.defineProperty(DetectUA.prototype, "isMobile", {
         /**
@@ -43,15 +36,14 @@ var DetectUA = /** @class */ (function () {
                 return cached;
             }
             else {
-                var iOSDevice = this.firstMatch(/(iphone|ipod)/i).toLowerCase();
                 if (
                 // Default mobile
                 !this.isTablet &&
                     (/[^-]mobi/i.test(this.userAgent) ||
                         // iPhone / iPod
-                        (iOSDevice === 'iphone' || iOSDevice === 'ipod') ||
+                        (this.iOS === 'iphone' || this.iOS === 'ipod') ||
                         // Android
-                        (!/like android/i.test(this.userAgent) && /android/i.test(this.userAgent)) ||
+                        this.android ||
                         // Nexus mobile
                         /nexus\s*[0-6]\s*/i.test(this.userAgent))) {
                     this.cache.set('isMobile', true);
@@ -74,16 +66,13 @@ var DetectUA = /** @class */ (function () {
                 return cached;
             }
             else {
-                var iOSDevice = this.firstMatch(/(ipad)/i).toLowerCase();
                 if (
                 // Default tablet
                 (/tablet/i.test(this.userAgent) && !/tablet pc/i.test(this.userAgent)) ||
                     // iPad
-                    iOSDevice === 'ipad' ||
+                    this.iOS === 'ipad' ||
                     // Android
-                    (!/like android/i.test(this.userAgent) &&
-                        /android/i.test(this.userAgent) &&
-                        !/[^-]mobi/i.test(this.userAgent)) ||
+                    (this.android && !/[^-]mobi/i.test(this.userAgent)) ||
                     // Nexus tablet
                     (!/nexus\s*[0-6]\s*/i.test(this.userAgent) && /nexus\s*[0-9]+/i.test(this.userAgent))) {
                     this.cache.set('isTablet', true);
@@ -114,6 +103,54 @@ var DetectUA = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(DetectUA.prototype, "isiOS", {
+        /**
+         * Returns if the device is an iOS device
+         */
+        get: function () {
+            var cached = this.cache.get('isiOS');
+            if (cached) {
+                return cached;
+            }
+            else {
+                if (this.iOS) {
+                    return {
+                        name: 'iOS',
+                        version: this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.'),
+                    };
+                }
+                else {
+                    return false;
+                }
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DetectUA.prototype, "isAndroid", {
+        /**
+         * Returns if the device is an Android device
+         */
+        get: function () {
+            var cached = this.cache.get('isAndroid');
+            if (cached) {
+                return cached;
+            }
+            else {
+                if (this.android) {
+                    return {
+                        name: 'Android',
+                        version: this.match(1, /android[ \/-](\d+(\.\d+)*)/i),
+                    };
+                }
+                else {
+                    return false;
+                }
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(DetectUA.prototype, "browser", {
         /**
          * Returns the browser name and version
@@ -124,76 +161,76 @@ var DetectUA = /** @class */ (function () {
                 return cached;
             }
             else {
-                var versionIdentifier = this.firstMatch(/version\/(\d+(\.\d+)?)/i);
+                var versionIdentifier = this.match(1, /version\/(\d+(\.\d+)?)/i);
                 var result = void 0;
                 if (/opera/i.test(this.userAgent)) {
                     // Opera
                     result = {
                         name: 'Opera',
-                        version: versionIdentifier || this.firstMatch(/(?:opera|opr|opios)[\s\/](\d+(\.\d+)?)/i),
+                        version: versionIdentifier || this.match(1, /(?:opera|opr|opios)[\s\/](\d+(\.\d+)?)/i),
                     };
                 }
                 else if (/opr\/|opios/i.test(this.userAgent)) {
                     // Opera
                     result = {
                         name: 'Opera',
-                        version: this.firstMatch(/(?:opr|opios)[\s\/](\d+(\.\d+)?)/i) || versionIdentifier,
+                        version: this.match(1, /(?:opr|opios)[\s\/](\d+(\.\d+)?)/i) || versionIdentifier,
                     };
                 }
                 else if (/SamsungBrowser/i.test(this.userAgent)) {
                     // Samsung Browser
                     result = {
                         name: 'Samsung Internet for Android',
-                        version: versionIdentifier || this.firstMatch(/(?:SamsungBrowser)[\s\/](\d+(\.\d+)?)/i),
+                        version: versionIdentifier || this.match(1, /(?:SamsungBrowser)[\s\/](\d+(\.\d+)?)/i),
                     };
                 }
                 else if (/yabrowser/i.test(this.userAgent)) {
                     // Yandex Browser
                     result = {
                         name: 'Yandex Browser',
-                        version: versionIdentifier || this.firstMatch(/(?:yabrowser)[\s\/](\d+(\.\d+)?)/i),
+                        version: versionIdentifier || this.match(1, /(?:yabrowser)[\s\/](\d+(\.\d+)?)/i),
                     };
                 }
                 else if (/ucbrowser/i.test(this.userAgent)) {
                     // UC Browser
                     result = {
                         name: 'UC Browser',
-                        version: this.firstMatch(/(?:ucbrowser)[\s\/](\d+(\.\d+)?)/i),
+                        version: this.match(1, /(?:ucbrowser)[\s\/](\d+(\.\d+)?)/i),
                     };
                 }
                 else if (/msie|trident/i.test(this.userAgent)) {
                     // Internet Explorer
                     result = {
                         name: 'Internet Explorer',
-                        version: this.firstMatch(/(?:msie |rv:)(\d+(\.\d+)?)/i),
+                        version: this.match(1, /(?:msie |rv:)(\d+(\.\d+)?)/i),
                     };
                 }
                 else if (/edg([ea]|ios)/i.test(this.userAgent)) {
                     // Edge
                     result = {
                         name: 'Microsoft Edge',
-                        version: this.secondMatch(/edg([ea]|ios)\/(\d+(\.\d+)?)/i),
+                        version: this.match(2, /edg([ea]|ios)\/(\d+(\.\d+)?)/i),
                     };
                 }
                 else if (/firefox|iceweasel|fxios/i.test(this.userAgent)) {
                     // Firefox
                     result = {
                         name: 'Firefox',
-                        version: this.firstMatch(/(?:firefox|iceweasel|fxios)[ \/](\d+(\.\d+)?)/i),
+                        version: this.match(1, /(?:firefox|iceweasel|fxios)[ \/](\d+(\.\d+)?)/i),
                     };
                 }
                 else if (/chromium/i.test(this.userAgent)) {
                     // Chromium
                     result = {
                         name: 'Chromium',
-                        version: this.firstMatch(/(?:chromium)[\s\/](\d+(?:\.\d+)?)/i) || versionIdentifier,
+                        version: this.match(1, /(?:chromium)[\s\/](\d+(?:\.\d+)?)/i) || versionIdentifier,
                     };
                 }
                 else if (/chrome|crios|crmo/i.test(this.userAgent)) {
                     // Chrome
                     result = {
                         name: 'Chrome',
-                        version: this.firstMatch(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i),
+                        version: this.match(1, /(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i),
                     };
                 }
                 else if (/safari|applewebkit/i.test(this.userAgent)) {
@@ -206,8 +243,8 @@ var DetectUA = /** @class */ (function () {
                 else {
                     // Everything else
                     result = {
-                        name: this.firstMatch(/^(.*)\/(.*) /),
-                        version: this.secondMatch(/^(.*)\/(.*) /),
+                        name: this.match(1, /^(.*)\/(.*) /),
+                        version: this.match(2, /^(.*)\/(.*) /),
                     };
                 }
                 this.cache.set('browser', result);
