@@ -6,6 +6,7 @@
   "browser": "dist/detect-ua.umd.js",
   "module": "dist/detect-ua.esm.js",
   "jsnext:main": "dist/detect-ua.esm.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
     "start": "rollup -c rollup.config.ts -w",
     "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
