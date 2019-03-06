@@ -915,11 +915,11 @@ img { max-width: 100%; }
 	<div class="content-wrap">
 		<div class="tsd-panel tsd-typography">
 			<h1 id="detect-user-agent">Detect user-agent</h1>
-			<p><img src="http://img.badgesize.io/TimvanScherpenzeel/detect-ua/master/dist/detect-ua.umd.js.svg?compression=gzip&maxAge=60" alt="">
+			<p><img src="http://img.badgesize.io/TimvanScherpenzeel/detect-ua/master/dist/detect-ua.cjs.js.svg?compression=gzip&maxAge=60" alt="">
 				<a href="https://badge.fury.io/js/detect-ua"><img src="https://badge.fury.io/js/detect-ua.svg" alt="npm version"></a>
 				<a href="https://david-dm.org/timvanscherpenzeel/detect-ua"><img src="https://david-dm.org/timvanscherpenzeel/detect-ua.svg" alt="dependencies"></a>
 			<a href="https://david-dm.org/timvanscherpenzeel/detect-ua#info=devDependencies"><img src="https://david-dm.org/timvanscherpenzeel/detect-ua/dev-status.svg" alt="devDependencies"></a></p>
-			<p>A small user-agent detection library (1 Kb).</p>
+			<p>A small user-agent detection library (974 B).</p>
 			<p>Is able to differentiate between mobile, tablet and desktop devices and finds your browser name and version.</p>
 			<h2 id="installation">Installation</h2>
 			<p>Make sure you have <a href="http://nodejs.org/">Node.js</a> installed.</p>
@@ -932,7 +932,9 @@ img { max-width: 100%; }
 <span class="hljs-built_in">console</span>.log(device.browser); <span class="hljs-comment">// -&gt; { name: Safari, version: 11.0 }</span>
 <span class="hljs-built_in">console</span>.log(device.isMobile); <span class="hljs-comment">// -&gt; true</span>
 <span class="hljs-built_in">console</span>.log(device.isTablet); <span class="hljs-comment">// -&gt; false</span>
-<span class="hljs-built_in">console</span>.log(device.isDesktop); <span class="hljs-comment">// -&gt; false</span></code></pre>
+<span class="hljs-built_in">console</span>.log(device.isDesktop); <span class="hljs-comment">// -&gt; false</span>
+<span class="hljs-built_in">console</span>.log(device.isAndroid); <span class="hljs-comment">// -&gt; false</span>
+<span class="hljs-built_in">console</span>.log(device.isiOS); <span class="hljs-comment">// -&gt; true</span></code></pre>
 			<h2 id="development">Development</h2>
 			<pre><code class="language-sh">$ yarn start
 
