@@ -1,3 +1,8 @@
+export interface IResult {
+  name: string;
+  version: string;
+}
+
 export class DetectUA {
   public userAgent: string;
 
@@ -113,7 +118,7 @@ export class DetectUA {
   /**
    * Returns if the device is an iOS device
    */
-  get isiOS(): { name: string; version: string } | boolean {
+  get isiOS(): IResult | boolean {
     const cached = this.cache.get('isiOS');
 
     if (cached) {
@@ -133,7 +138,7 @@ export class DetectUA {
   /**
    * Returns if the device is an Android device
    */
-  get isAndroid(): { name: string; version: string } | boolean {
+  get isAndroid(): IResult | boolean {
     const cached = this.cache.get('isAndroid');
 
     if (cached) {
@@ -153,7 +158,7 @@ export class DetectUA {
   /**
    * Returns the browser name and version
    */
-  get browser(): { name: string; version: string } | boolean {
+  get browser(): IResult | boolean {
     const cached = this.cache.get('browser');
 
     if (cached) {

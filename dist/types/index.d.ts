@@ -1,3 +1,7 @@
+export interface IResult {
+    name: string;
+    version: string;
+}
 export declare class DetectUA {
     userAgent: string;
     private android;
@@ -30,22 +34,13 @@ export declare class DetectUA {
     /**
      * Returns if the device is an iOS device
      */
-    readonly isiOS: {
-        name: string;
-        version: string;
-    } | boolean;
+    readonly isiOS: IResult | boolean;
     /**
      * Returns if the device is an Android device
      */
-    readonly isAndroid: {
-        name: string;
-        version: string;
-    } | boolean;
+    readonly isAndroid: IResult | boolean;
     /**
      * Returns the browser name and version
      */
-    readonly browser: {
-        name: string;
-        version: string;
-    } | boolean;
+    readonly browser: IResult | boolean;
 }
