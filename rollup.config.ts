@@ -16,6 +16,7 @@ import pkg from './package.json';
 const input = './src/index.ts';
 const name = 'DetectUA';
 
+// tslint:disable-next-line:typedef
 const plugins = ({ isUMD = false, isCJS = false, isES = false }) => [
   resolvePlugin(),
   (isUMD || isCJS) && commonjsPlugin(),

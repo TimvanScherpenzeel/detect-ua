@@ -33,7 +33,7 @@ export class DetectUA {
    *
    * @param pattern regular expression pattern
    */
-  private match(position: number, pattern: RegExp) {
+  private match(position: number, pattern: RegExp): string {
     const match = this.userAgent.match(pattern);
     return (match && match.length > 1 && match[position]) || '';
   }

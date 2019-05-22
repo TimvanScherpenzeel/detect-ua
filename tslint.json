@@ -5,7 +5,8 @@
   "rules": {
     "no-bitwise": false,
     "no-console": false,
-    "trailing-comma": true
+    "trailing-comma": true,
+    "typedef": [true, "call-signature", "property-declaration", "arrow-call-signature"]
   },
   "rulesDirectory": []
 }
