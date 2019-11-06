@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title>Detect UA</title>
+  </head>
+
+  <body>
+    <pre id="app"></pre>
+
+    <script src="./dist/detect-ua.umd.js"></script>
+
+    <script>
+      var browser = new DetectUA.DetectUA();
+
+      console.log(browser);
+
+      document
+        .getElementById('app')
+        .appendChild(
+          document.createTextNode(
+            'Browser name: ' +
+              browser.browser.name +
+              '\n' +
+              'Version: ' +
+              browser.browser.version +
+              '\n' +
+              'isDesktop: ' +
+              browser.isDesktop +
+              '\n' +
+              'isMobile: ' +
+              browser.isMobile +
+              '\n' +
+              'isTablet: ' +
+              browser.isTablet +
+              '\n'
+          )
+        );
+    </script>
+  </body>
+</html>

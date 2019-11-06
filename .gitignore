@@ -13,8 +13,5 @@ node_modules
 # Directories
 coverage
 
-# Files
-index.html
-
 # Logging
 *.log
