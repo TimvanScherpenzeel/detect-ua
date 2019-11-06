@@ -26,6 +26,18 @@ export class DetectUA {
 
     this.android = !/like android/i.test(this.userAgent) && /android/i.test(this.userAgent);
     this.iOS = this.match(1, /(iphone|ipod|ipad)/i).toLowerCase();
+
+    // Workaround for ipadOS
+    // SEE: https://github.com/lancedikson/bowser/issues/329
+    // SEE: https://stackoverflow.com/questions/58019463/how-to-detect-device-name-in-safari-on-ios-13-while-it-doesnt-show-the-correct
+    if (
+      navigator.platform === 'MacIntel' &&
+      navigator.maxTouchPoints &&
+      navigator.maxTouchPoints > 2 &&
+      !(window as any).MSStream
+    ) {
+      this.iOS = 'ipad';
+    }
   }
 
   /**
@@ -127,7 +139,9 @@ export class DetectUA {
       if (this.iOS) {
         return {
           name: 'iOS',
-          version: this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.'),
+          version:
+            this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.') ||
+            this.match(1, /version\/(\d+(\.\d+)?)/i),
         };
       } else {
         return false;
