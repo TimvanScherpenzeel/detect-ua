@@ -22,25 +22,25 @@ export declare class DetectUA {
     /**
      * Returns if the device is a mobile device
      */
-    readonly isMobile: boolean;
+    get isMobile(): boolean;
     /**
      * Returns if the device is a tablet device
      */
-    readonly isTablet: boolean;
+    get isTablet(): boolean;
     /**
      * Returns if the device is a desktop device
      */
-    readonly isDesktop: boolean;
+    get isDesktop(): boolean;
     /**
      * Returns if the device is an iOS device
      */
-    readonly isiOS: IResult | boolean;
+    get isiOS(): IResult | boolean;
     /**
      * Returns if the device is an Android device
      */
-    readonly isAndroid: IResult | boolean;
+    get isAndroid(): IResult | boolean;
     /**
      * Returns the browser name and version
      */
-    readonly browser: IResult | boolean;
+    get browser(): IResult | boolean;
 }

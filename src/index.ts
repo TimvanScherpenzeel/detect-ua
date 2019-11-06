@@ -32,7 +32,6 @@ export class DetectUA {
     // SEE: https://stackoverflow.com/questions/58019463/how-to-detect-device-name-in-safari-on-ios-13-while-it-doesnt-show-the-correct
     if (
       navigator.platform === 'MacIntel' &&
-      navigator.maxTouchPoints &&
       navigator.maxTouchPoints > 2 &&
       !(window as any).MSStream
     ) {
