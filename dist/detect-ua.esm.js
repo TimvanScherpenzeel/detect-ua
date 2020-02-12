@@ -7,6 +7,9 @@ var DetectUA = /** @class */ (function () {
     function DetectUA(forceUserAgent) {
         // Internal cache, prevents from doing the same computations twice
         this.cache = new Map();
+        /**
+         * Extract MacOS version name from version number
+         */
         this.getMacOSVersionName = function (version) {
             var versionName = version
                 .split('.')
@@ -43,6 +46,9 @@ var DetectUA = /** @class */ (function () {
                     return '';
             }
         };
+        /**
+         * Extract Windows version name from version number
+         */
         this.getWindowsVersionName = function (version) {
             switch (version) {
                 case 'NT':

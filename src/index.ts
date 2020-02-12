@@ -50,6 +50,9 @@ export class DetectUA {
     return (match && match.length > 1 && match[position]) || '';
   }
 
+  /**
+   * Extract MacOS version name from version number
+   */
   private getMacOSVersionName = (version: string): string => {
     const versionName = version
       .split('.')
@@ -90,6 +93,9 @@ export class DetectUA {
     }
   };
 
+  /**
+   * Extract Windows version name from version number
+   */
   private getWindowsVersionName = (version: string): string => {
     switch (version) {
       case 'NT':
