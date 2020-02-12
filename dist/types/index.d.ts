@@ -1,4 +1,7 @@
-export interface IResult {
+export interface IDeviceResult {
+    version: string;
+}
+export interface IBrowserResult {
     name: string;
     version: string;
 }
@@ -8,7 +11,7 @@ export declare class DetectUA {
     private iOS;
     private cache;
     /**
-     * Detect a users browser, browser version and wheter it is a mobile-, tablet- or desktop device.
+     * Detect a users browser, browser version and whether it is a mobile-, tablet- or desktop device
      *
      * @param forceUserAgent Force a user agent string (useful for testing)
      */
@@ -20,11 +23,11 @@ export declare class DetectUA {
      */
     private match;
     /**
-     * Extract MacOS version name from version number
+     * Extract MacOS version name from a version number
      */
     private getMacOSVersionName;
     /**
-     * Extract Windows version name from version number
+     * Extract Windows version name from a version number
      */
     private getWindowsVersionName;
     /**
@@ -42,21 +45,21 @@ export declare class DetectUA {
     /**
      * Returns if the device is running MacOS (and if so which version)
      */
-    get isMacOS(): IResult | boolean;
+    get isMacOS(): IDeviceResult | boolean;
     /**
      * Returns if the device is running Windows (and if so which version)
      */
-    get isWindows(): IResult | boolean;
+    get isWindows(): IDeviceResult | boolean;
     /**
      * Returns if the device is an iOS device (and if so which version)
      */
-    get isiOS(): IResult | boolean;
+    get isiOS(): IDeviceResult | boolean;
     /**
      * Returns if the device is an Android device (and if so which version)
      */
-    get isAndroid(): IResult | boolean;
+    get isAndroid(): IDeviceResult | boolean;
     /**
      * Returns the browser name and version
      */
-    get browser(): IResult | boolean;
+    get browser(): IBrowserResult | boolean;
 }

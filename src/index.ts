@@ -1,4 +1,8 @@
-export interface IResult {
+export interface IDeviceResult {
+  version: string;
+}
+
+export interface IBrowserResult {
   name: string;
   version: string;
 }
@@ -193,14 +197,13 @@ export class DetectUA {
   /**
    * Returns if the device is running MacOS (and if so which version)
    */
-  get isMacOS(): IResult | boolean {
+  get isMacOS(): IDeviceResult | boolean {
     const cached = this.cache.get('isMacOS');
 
     if (cached !== undefined) {
       return cached;
     } else {
       const result = /macintosh/i.test(this.userAgent) && {
-        name: 'MacOS',
         version: this.getMacOSVersionName(
           this.match(1, /mac os x (\d+(\.?_?\d+)+)/i).replace(/[_\s]/g, '.')
         ),
@@ -215,14 +218,13 @@ export class DetectUA {
   /**
    * Returns if the device is running Windows (and if so which version)
    */
-  get isWindows(): IResult | boolean {
+  get isWindows(): IDeviceResult | boolean {
     const cached = this.cache.get('isWindows');
 
     if (cached !== undefined) {
       return cached;
     } else {
       const result = /windows /i.test(this.userAgent) && {
-        name: 'Windows',
         version: this.getWindowsVersionName(this.match(1, /Windows ((NT|XP)( \d\d?.\d)?)/i)),
       };
 
@@ -235,14 +237,13 @@ export class DetectUA {
   /**
    * Returns if the device is an iOS device (and if so which version)
    */
-  get isiOS(): IResult | boolean {
+  get isiOS(): IDeviceResult | boolean {
     const cached = this.cache.get('isiOS');
 
     if (cached !== undefined) {
       return cached;
     } else {
       const result = !!this.iOS && {
-        name: 'iOS',
         version:
           this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.') ||
           this.match(1, /version\/(\d+(\.\d+)?)/i),
@@ -257,14 +258,13 @@ export class DetectUA {
   /**
    * Returns if the device is an Android device (and if so which version)
    */
-  get isAndroid(): IResult | boolean {
+  get isAndroid(): IDeviceResult | boolean {
     const cached = this.cache.get('isAndroid');
 
     if (cached !== undefined) {
       return cached;
     } else {
       const result = this.android && {
-        name: 'Android',
         version: this.match(1, /android[ \/-](\d+(\.\d+)*)/i),
       };
 
@@ -277,7 +277,7 @@ export class DetectUA {
   /**
    * Returns the browser name and version
    */
-  get browser(): IResult | boolean {
+  get browser(): IBrowserResult | boolean {
     const cached = this.cache.get('browser');
 
     if (cached !== undefined) {

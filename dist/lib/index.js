@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var DetectUA = /** @class */ (function () {
     /**
-     * Detect a users browser, browser version and wheter it is a mobile-, tablet- or desktop device.
+     * Detect a users browser, browser version and whether it is a mobile-, tablet- or desktop device
      *
      * @param forceUserAgent Force a user agent string (useful for testing)
      */
@@ -10,7 +10,7 @@ var DetectUA = /** @class */ (function () {
         // Internal cache, prevents from doing the same computations twice
         this.cache = new Map();
         /**
-         * Extract MacOS version name from version number
+         * Extract MacOS version name from a version number
          */
         this.getMacOSVersionName = function (version) {
             var versionName = version
@@ -49,7 +49,7 @@ var DetectUA = /** @class */ (function () {
             }
         };
         /**
-         * Extract Windows version name from version number
+         * Extract Windows version name from a version number
          */
         this.getWindowsVersionName = function (version) {
             switch (version) {
@@ -183,7 +183,6 @@ var DetectUA = /** @class */ (function () {
             }
             else {
                 var result = /macintosh/i.test(this.userAgent) && {
-                    name: 'MacOS',
                     version: this.getMacOSVersionName(this.match(1, /mac os x (\d+(\.?_?\d+)+)/i).replace(/[_\s]/g, '.')),
                 };
                 this.cache.set('isMacOS', result);
@@ -204,7 +203,6 @@ var DetectUA = /** @class */ (function () {
             }
             else {
                 var result = /windows /i.test(this.userAgent) && {
-                    name: 'Windows',
                     version: this.getWindowsVersionName(this.match(1, /Windows ((NT|XP)( \d\d?.\d)?)/i)),
                 };
                 this.cache.set('isWindows', result);
@@ -225,7 +223,6 @@ var DetectUA = /** @class */ (function () {
             }
             else {
                 var result = !!this.iOS && {
-                    name: 'iOS',
                     version: this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.') ||
                         this.match(1, /version\/(\d+(\.\d+)?)/i),
                 };
@@ -247,7 +244,6 @@ var DetectUA = /** @class */ (function () {
             }
             else {
                 var result = this.android && {
-                    name: 'Android',
                     version: this.match(1, /android[ \/-](\d+(\.\d+)*)/i),
                 };
                 this.cache.set('isAndroid', result);
