@@ -181,7 +181,7 @@
            * Returns if the device is running Windows (and if so which version)
            */
           get: function () {
-              var cached = this.cache.get('isMacOS');
+              var cached = this.cache.get('isWindows');
               if (cached !== undefined) {
                   return cached;
               }

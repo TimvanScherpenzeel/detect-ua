@@ -196,7 +196,7 @@ export class DetectUA {
    * Returns if the device is running Windows (and if so which version)
    */
   get isWindows(): IResult | boolean {
-    const cached = this.cache.get('isMacOS');
+    const cached = this.cache.get('isWindows');
 
     if (cached !== undefined) {
       return cached;
