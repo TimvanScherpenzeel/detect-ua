@@ -7,74 +7,6 @@ var DetectUA = /** @class */ (function () {
     function DetectUA(forceUserAgent) {
         // Internal cache, prevents from doing the same computations twice
         this.cache = new Map();
-        /**
-         * Extract MacOS version name from a version number
-         */
-        this.getMacOSVersionName = function (version) {
-            var versionName = version
-                .split('.')
-                .splice(0, 2)
-                .map(function (versionNumbers) { return parseInt(versionNumbers, 10) || 0; });
-            versionName.push(0);
-            if (versionName[0] !== 10) {
-                return '';
-            }
-            switch (versionName[1]) {
-                case 5:
-                    return 'Leopard';
-                case 6:
-                    return 'Snow Leopard';
-                case 7:
-                    return 'Lion';
-                case 8:
-                    return 'Mountain Lion';
-                case 9:
-                    return 'Mavericks';
-                case 10:
-                    return 'Yosemite';
-                case 11:
-                    return 'El Capitan';
-                case 12:
-                    return 'Sierra';
-                case 13:
-                    return 'High Sierra';
-                case 14:
-                    return 'Mojave';
-                case 15:
-                    return 'Catalina';
-                default:
-                    return '';
-            }
-        };
-        /**
-         * Extract Windows version name from a version number
-         */
-        this.getWindowsVersionName = function (version) {
-            switch (version) {
-                case 'NT':
-                    return 'NT';
-                case 'XP':
-                    return 'XP';
-                case 'NT 5.0':
-                    return '2000';
-                case 'NT 5.1':
-                    return 'XP';
-                case 'NT 5.2':
-                    return '2003';
-                case 'NT 6.0':
-                    return 'Vista';
-                case 'NT 6.1':
-                    return '7';
-                case 'NT 6.2':
-                    return '8';
-                case 'NT 6.3':
-                    return '8.1';
-                case 'NT 10.0':
-                    return '10';
-                default:
-                    return '';
-            }
-        };
         this.userAgent = forceUserAgent
             ? forceUserAgent
             : window && window.navigator
@@ -181,7 +113,12 @@ var DetectUA = /** @class */ (function () {
             }
             else {
                 var result = /macintosh/i.test(this.userAgent) && {
-                    version: this.getMacOSVersionName(this.match(1, /mac os x (\d+(\.?_?\d+)+)/i).replace(/[_\s]/g, '.')),
+                    version: this.match(1, /mac os x (\d+(\.?_?\d+)+)/i)
+                        .replace(/[_\s]/g, '.')
+                        .split('.')
+                        .concat(Array(2).fill(''))
+                        .slice(0, 2)
+                        .map(function (versionNumber) { return versionNumber; })[1],
                 };
                 this.cache.set('isMacOS', result);
                 return result;
@@ -201,7 +138,7 @@ var DetectUA = /** @class */ (function () {
             }
             else {
                 var result = /windows /i.test(this.userAgent) && {
-                    version: this.getWindowsVersionName(this.match(1, /Windows ((NT|XP)( \d\d?.\d)?)/i)),
+                    version: this.match(1, /Windows ((NT|XP)( \d\d?.\d)?)/i),
                 };
                 this.cache.set('isWindows', result);
                 return result;

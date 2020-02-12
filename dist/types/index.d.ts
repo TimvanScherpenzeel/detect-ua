@@ -23,14 +23,6 @@ export declare class DetectUA {
      */
     private match;
     /**
-     * Extract MacOS version name from a version number
-     */
-    private getMacOSVersionName;
-    /**
-     * Extract Windows version name from a version number
-     */
-    private getWindowsVersionName;
-    /**
      * Returns if the device is a mobile device
      */
     get isMobile(): boolean;
