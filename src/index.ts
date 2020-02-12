@@ -112,7 +112,8 @@ export class DetectUA {
     return (
       /macintosh/i.test(this.userAgent) && {
         version: this.match(1, /mac os x (\d+(\.?_?\d+)+)/i)
-          .split(/[_\s]/g)
+          .replace(/[_\s]/g, '.')
+          .split('.')
           .map((versionNumber: string): string => versionNumber)[1],
       }
     );

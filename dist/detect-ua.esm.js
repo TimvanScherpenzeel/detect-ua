@@ -97,7 +97,8 @@ var DetectUA = /** @class */ (function () {
         get: function () {
             return (/macintosh/i.test(this.userAgent) && {
                 version: this.match(1, /mac os x (\d+(\.?_?\d+)+)/i)
-                    .split(/[_\s]/g)
+                    .replace(/[_\s]/g, '.')
+                    .split('.')
                     .map(function (versionNumber) { return versionNumber; })[1],
             });
         },
