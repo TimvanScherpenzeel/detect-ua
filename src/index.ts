@@ -14,7 +14,7 @@ export class DetectUA {
   private cache: Map<string, any> = new Map();
 
   /**
-   * Detect a users browser, browser version and wheter it is a mobile-, tablet- or desktop device.
+   * Detect a users browser, browser version and whether it is a mobile-, tablet- or desktop device
    *
    * @param forceUserAgent Force a user agent string (useful for testing)
    */
@@ -51,7 +51,7 @@ export class DetectUA {
   }
 
   /**
-   * Extract MacOS version name from version number
+   * Extract MacOS version name from a version number
    */
   private getMacOSVersionName = (version: string): string => {
     const versionName = version
@@ -94,7 +94,7 @@ export class DetectUA {
   };
 
   /**
-   * Extract Windows version name from version number
+   * Extract Windows version name from a version number
    */
   private getWindowsVersionName = (version: string): string => {
     switch (version) {
