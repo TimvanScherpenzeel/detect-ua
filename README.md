@@ -22,12 +22,14 @@ import { DetectUA } from 'detect-ua';
 
 const device = new DetectUA();
 
-console.log(device.browser); // -> { name: Safari, version: 11.0 }
-console.log(device.isMobile); // -> true
+console.log(device.browser); // -> { name: "Chrome", version: "80.0" }
+console.log(device.isMobile); // -> false
 console.log(device.isTablet); // -> false
-console.log(device.isDesktop); // -> false
+console.log(device.isDesktop); // -> true
+console.log(device.isMacOS); // { name: "MacOS", version: "Catalina" }
+console.log(device.isWindows); // -> false
 console.log(device.isAndroid); // -> false
-console.log(device.isiOS); // -> true
+console.log(device.isiOS); // -> false
 ```
 
 ## Development
