@@ -94,6 +94,18 @@ export class DetectUA {
 
   /**
    * Returns if the device is running MacOS (and if so which version)
+   *
+   * '5' => Leopard'
+   * '6' => Snow Leopard'
+   * '7' => Lion'
+   * '8' => Mountain Lion'
+   * '9' => Mavericks'
+   * '10' => Yosemite'
+   * '11' => El Capitan'
+   * '12' => Sierra'
+   * '13' => High Sierra'
+   * '14' => Mojave'
+   * '15' => Catalina'
    */
   get isMacOS(): IDeviceResult | boolean {
     return (
@@ -110,6 +122,17 @@ export class DetectUA {
 
   /**
    * Returns if the device is running Windows (and if so which version)
+   *
+   * 'NT' => 'NT'
+   * 'XP' => 'XP'
+   * 'NT 5.0' => '2000'
+   * 'NT 5.1' => 'XP'
+   * 'NT 5.2' => '2003'
+   * 'NT 6.0' => 'Vista'
+   * 'NT 6.1' => '7'
+   * 'NT 6.2' => '8'
+   * 'NT 6.3' => '8.1'
+   * 'NT 10.0' => '10'
    */
   get isWindows(): IDeviceResult | boolean {
     return (
