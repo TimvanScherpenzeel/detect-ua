@@ -26,7 +26,7 @@ console.log(device.browser); // -> { name: "Chrome", version: "80.0" }
 console.log(device.isMobile); // -> false
 console.log(device.isTablet); // -> false
 console.log(device.isDesktop); // -> true
-console.log(device.isMacOS); // { name: "MacOS", version: "Catalina" }
+console.log(device.isMacOS); // { version: "10" }
 console.log(device.isWindows); // -> false
 console.log(device.isAndroid); // -> false
 console.log(device.isiOS); // -> false
