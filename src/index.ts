@@ -28,7 +28,7 @@ export class DetectUA {
     this.android = !/like android/i.test(this.userAgent) && /android/i.test(this.userAgent);
     this.iOS = this.match(1, /(iphone|ipod|ipad)/i).toLowerCase();
 
-    // Workaround for ipadOS
+    // Workaround for ipadOS, force detection as tablet
     // SEE: https://github.com/lancedikson/bowser/issues/329
     // SEE: https://stackoverflow.com/questions/58019463/how-to-detect-device-name-in-safari-on-ios-13-while-it-doesnt-show-the-correct
     if (
