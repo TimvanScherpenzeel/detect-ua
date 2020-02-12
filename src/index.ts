@@ -12,12 +12,8 @@ export class DetectUA {
 
   // Internal variables, prevents multiple lookups
   // TODO: nicer way to handle these variables
-  private android: boolean;
-  private iOS: string;
-
-  // Internal cache, prevents from doing the same computations twice
-  // TODO: potentially instantiate Map with entries with undefined values
-  private cache: Map<string, any> = new Map();
+  private isAndroidDevice: boolean;
+  private iOSDevice: string;
 
   /**
    * Detect a users browser, browser version and whether it is a mobile-, tablet- or desktop device
@@ -31,8 +27,8 @@ export class DetectUA {
       ? window.navigator.userAgent
       : '';
 
-    this.android = !/like android/i.test(this.userAgent) && /android/i.test(this.userAgent);
-    this.iOS = this.match(1, /(iphone|ipod|ipad)/i).toLowerCase();
+    this.isAndroidDevice = !/like android/i.test(this.userAgent) && /android/i.test(this.userAgent);
+    this.iOSDevice = this.match(1, /(iphone|ipod|ipad)/i).toLowerCase();
 
     // Workaround for ipadOS, force detection as tablet
     // SEE: https://github.com/lancedikson/bowser/issues/329
@@ -42,7 +38,7 @@ export class DetectUA {
       navigator.maxTouchPoints > 2 &&
       !(window as any).MSStream
     ) {
-      this.iOS = 'ipad';
+      this.iOSDevice = 'ipad';
     }
   }
 
@@ -60,242 +56,172 @@ export class DetectUA {
    * Returns if the device is a mobile device
    */
   get isMobile(): boolean {
-    // TODO: further codegolf the caching / memoization (or abstract it into a seperate method)
-    const cached = this.cache.get('isMobile');
-
-    if (cached !== undefined) {
-      return cached;
-    } else {
-      const result = // Default mobile
-        !this.isTablet &&
-        (/[^-]mobi/i.test(this.userAgent) ||
-          // iPhone / iPod
-          this.iOS === 'iphone' ||
-          this.iOS === 'ipod' ||
-          // Android
-          this.android ||
-          // Nexus mobile
-          /nexus\s*[0-6]\s*/i.test(this.userAgent));
-
-      this.cache.set('isMobile', result);
-
-      return result;
-    }
+    return (
+      // Default mobile
+      !this.isTablet &&
+      (/[^-]mobi/i.test(this.userAgent) ||
+        // iPhone / iPod
+        this.iOSDevice === 'iphone' ||
+        this.iOSDevice === 'ipod' ||
+        // Android
+        this.isAndroidDevice ||
+        // Nexus mobile
+        /nexus\s*[0-6]\s*/i.test(this.userAgent))
+    );
   }
 
   /**
    * Returns if the device is a tablet device
    */
   get isTablet(): boolean {
-    const cached = this.cache.get('isTablet');
-
-    if (cached !== undefined) {
-      return cached;
-    } else {
-      const result = // Default tablet
-        (/tablet/i.test(this.userAgent) && !/tablet pc/i.test(this.userAgent)) ||
-        // iPad
-        this.iOS === 'ipad' ||
-        // Android
-        (this.android && !/[^-]mobi/i.test(this.userAgent)) ||
-        // Nexus tablet
-        (!/nexus\s*[0-6]\s*/i.test(this.userAgent) && /nexus\s*[0-9]+/i.test(this.userAgent));
-
-      this.cache.set('isTablet', result);
-
-      return result;
-    }
+    return (
+      // Default tablet
+      (/tablet/i.test(this.userAgent) && !/tablet pc/i.test(this.userAgent)) ||
+      // iPad
+      this.iOSDevice === 'ipad' ||
+      // Android
+      (this.isAndroidDevice && !/[^-]mobi/i.test(this.userAgent)) ||
+      // Nexus tablet
+      (!/nexus\s*[0-6]\s*/i.test(this.userAgent) && /nexus\s*[0-9]+/i.test(this.userAgent))
+    );
   }
 
   /**
    * Returns if the device is a desktop device
    */
   get isDesktop(): boolean {
-    const cached = this.cache.get('isDesktop');
-
-    if (cached !== undefined) {
-      return cached;
-    } else {
-      const result = !this.isMobile && !this.isTablet;
-
-      this.cache.set('isDesktop', result);
-
-      return result;
-    }
+    return !this.isMobile && !this.isTablet;
   }
 
   /**
    * Returns if the device is running MacOS (and if so which version)
    */
   get isMacOS(): IDeviceResult | boolean {
-    const cached = this.cache.get('isMacOS');
-
-    if (cached !== undefined) {
-      return cached;
-    } else {
-      const result = /macintosh/i.test(this.userAgent) && {
+    return (
+      /macintosh/i.test(this.userAgent) && {
         version: this.match(1, /mac os x (\d+(\.?_?\d+)+)/i)
           .replace(/[_\s]/g, '.')
           .split('.')
           .concat(Array(2).fill(''))
           .slice(0, 2)
           .map((versionNumber: string): string => versionNumber)[1],
-      };
-
-      this.cache.set('isMacOS', result);
-
-      return result;
-    }
+      }
+    );
   }
 
   /**
    * Returns if the device is running Windows (and if so which version)
    */
   get isWindows(): IDeviceResult | boolean {
-    const cached = this.cache.get('isWindows');
-
-    if (cached !== undefined) {
-      return cached;
-    } else {
-      const result = /windows /i.test(this.userAgent) && {
+    return (
+      /windows /i.test(this.userAgent) && {
         version: this.match(1, /Windows ((NT|XP)( \d\d?.\d)?)/i),
-      };
-
-      this.cache.set('isWindows', result);
-
-      return result;
-    }
+      }
+    );
   }
 
   /**
    * Returns if the device is an iOS device (and if so which version)
    */
   get isiOS(): IDeviceResult | boolean {
-    const cached = this.cache.get('isiOS');
-
-    if (cached !== undefined) {
-      return cached;
-    } else {
-      const result = !!this.iOS && {
+    return (
+      !!this.iOSDevice && {
         version:
           this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.') ||
           this.match(1, /version\/(\d+(\.\d+)?)/i),
-      };
-
-      this.cache.set('isiOS', result);
-
-      return result;
-    }
+      }
+    );
   }
 
   /**
    * Returns if the device is an Android device (and if so which version)
    */
   get isAndroid(): IDeviceResult | boolean {
-    const cached = this.cache.get('isAndroid');
-
-    if (cached !== undefined) {
-      return cached;
-    } else {
-      const result = this.android && {
+    return (
+      this.isAndroidDevice && {
         version: this.match(1, /android[ \/-](\d+(\.\d+)*)/i),
-      };
-
-      this.cache.set('isAndroid', result);
-
-      return result;
-    }
+      }
+    );
   }
 
   /**
    * Returns the browser name and version
    */
   get browser(): IBrowserResult | boolean {
-    const cached = this.cache.get('browser');
+    const versionIdentifier = this.match(1, /version\/(\d+(\.\d+)?)/i);
 
-    if (cached !== undefined) {
-      return cached;
+    if (/opera/i.test(this.userAgent)) {
+      // Opera
+      return {
+        name: 'Opera',
+        version: versionIdentifier || this.match(1, /(?:opera|opr|opios)[\s\/](\d+(\.\d+)?)/i),
+      };
+    } else if (/opr\/|opios/i.test(this.userAgent)) {
+      // Opera
+      return {
+        name: 'Opera',
+        version: this.match(1, /(?:opr|opios)[\s\/](\d+(\.\d+)?)/i) || versionIdentifier,
+      };
+    } else if (/SamsungBrowser/i.test(this.userAgent)) {
+      // Samsung Browser
+      return {
+        name: 'Samsung Internet for Android',
+        version: versionIdentifier || this.match(1, /(?:SamsungBrowser)[\s\/](\d+(\.\d+)?)/i),
+      };
+    } else if (/yabrowser/i.test(this.userAgent)) {
+      // Yandex Browser
+      return {
+        name: 'Yandex Browser',
+        version: versionIdentifier || this.match(1, /(?:yabrowser)[\s\/](\d+(\.\d+)?)/i),
+      };
+    } else if (/ucbrowser/i.test(this.userAgent)) {
+      // UC Browser
+      return {
+        name: 'UC Browser',
+        version: this.match(1, /(?:ucbrowser)[\s\/](\d+(\.\d+)?)/i),
+      };
+    } else if (/msie|trident/i.test(this.userAgent)) {
+      // Internet Explorer
+      return {
+        name: 'Internet Explorer',
+        version: this.match(1, /(?:msie |rv:)(\d+(\.\d+)?)/i),
+      };
+    } else if (/(edge|edgios|edga|edg)/i.test(this.userAgent)) {
+      // Edge
+      return {
+        name: 'Microsoft Edge',
+        version: this.match(2, /(edge|edgios|edga|edg)\/(\d+(\.\d+)?)/i),
+      };
+    } else if (/firefox|iceweasel|fxios/i.test(this.userAgent)) {
+      // Firefox
+      return {
+        name: 'Firefox',
+        version: this.match(1, /(?:firefox|iceweasel|fxios)[ \/](\d+(\.\d+)?)/i),
+      };
+    } else if (/chromium/i.test(this.userAgent)) {
+      // Chromium
+      return {
+        name: 'Chromium',
+        version: this.match(1, /(?:chromium)[\s\/](\d+(?:\.\d+)?)/i) || versionIdentifier,
+      };
+    } else if (/chrome|crios|crmo/i.test(this.userAgent)) {
+      // Chrome
+      return {
+        name: 'Chrome',
+        version: this.match(1, /(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i),
+      };
+    } else if (/safari|applewebkit/i.test(this.userAgent)) {
+      // Safari
+      return {
+        name: 'Safari',
+        version: versionIdentifier,
+      };
     } else {
-      const versionIdentifier = this.match(1, /version\/(\d+(\.\d+)?)/i);
-      let result;
-
-      if (/opera/i.test(this.userAgent)) {
-        // Opera
-        result = {
-          name: 'Opera',
-          version: versionIdentifier || this.match(1, /(?:opera|opr|opios)[\s\/](\d+(\.\d+)?)/i),
-        };
-      } else if (/opr\/|opios/i.test(this.userAgent)) {
-        // Opera
-        result = {
-          name: 'Opera',
-          version: this.match(1, /(?:opr|opios)[\s\/](\d+(\.\d+)?)/i) || versionIdentifier,
-        };
-      } else if (/SamsungBrowser/i.test(this.userAgent)) {
-        // Samsung Browser
-        result = {
-          name: 'Samsung Internet for Android',
-          version: versionIdentifier || this.match(1, /(?:SamsungBrowser)[\s\/](\d+(\.\d+)?)/i),
-        };
-      } else if (/yabrowser/i.test(this.userAgent)) {
-        // Yandex Browser
-        result = {
-          name: 'Yandex Browser',
-          version: versionIdentifier || this.match(1, /(?:yabrowser)[\s\/](\d+(\.\d+)?)/i),
-        };
-      } else if (/ucbrowser/i.test(this.userAgent)) {
-        // UC Browser
-        result = {
-          name: 'UC Browser',
-          version: this.match(1, /(?:ucbrowser)[\s\/](\d+(\.\d+)?)/i),
-        };
-      } else if (/msie|trident/i.test(this.userAgent)) {
-        // Internet Explorer
-        result = {
-          name: 'Internet Explorer',
-          version: this.match(1, /(?:msie |rv:)(\d+(\.\d+)?)/i),
-        };
-      } else if (/(edge|edgios|edga|edg)/i.test(this.userAgent)) {
-        // Edge
-        result = {
-          name: 'Microsoft Edge',
-          version: this.match(2, /(edge|edgios|edga|edg)\/(\d+(\.\d+)?)/i),
-        };
-      } else if (/firefox|iceweasel|fxios/i.test(this.userAgent)) {
-        // Firefox
-        result = {
-          name: 'Firefox',
-          version: this.match(1, /(?:firefox|iceweasel|fxios)[ \/](\d+(\.\d+)?)/i),
-        };
-      } else if (/chromium/i.test(this.userAgent)) {
-        // Chromium
-        result = {
-          name: 'Chromium',
-          version: this.match(1, /(?:chromium)[\s\/](\d+(?:\.\d+)?)/i) || versionIdentifier,
-        };
-      } else if (/chrome|crios|crmo/i.test(this.userAgent)) {
-        // Chrome
-        result = {
-          name: 'Chrome',
-          version: this.match(1, /(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i),
-        };
-      } else if (/safari|applewebkit/i.test(this.userAgent)) {
-        // Safari
-        result = {
-          name: 'Safari',
-          version: versionIdentifier,
-        };
-      } else {
-        // Everything else
-        result = {
-          name: this.match(1, /^(.*)\/(.*) /),
-          version: this.match(2, /^(.*)\/(.*) /),
-        };
-      }
-
-      this.cache.set('browser', result);
-
-      return result;
+      // Everything else
+      return {
+        name: this.match(1, /^(.*)\/(.*) /),
+        version: this.match(2, /^(.*)\/(.*) /),
+      };
     }
   }
 }

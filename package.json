@@ -1,7 +1,7 @@
 {
   "name": "detect-ua",
   "version": "0.1.0",
-  "description": "A small user-agent detection library (1.1 kB)",
+  "description": "A small user-agent detection library (1 kB)",
   "main": "dist/detect-ua.cjs.js",
   "browser": "dist/detect-ua.umd.js",
   "module": "dist/detect-ua.esm.js",

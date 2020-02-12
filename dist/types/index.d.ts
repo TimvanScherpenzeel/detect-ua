@@ -7,9 +7,8 @@ export interface IBrowserResult {
 }
 export declare class DetectUA {
     userAgent: string;
-    private android;
-    private iOS;
-    private cache;
+    private isAndroidDevice;
+    private iOSDevice;
     /**
      * Detect a users browser, browser version and whether it is a mobile-, tablet- or desktop device
      *
