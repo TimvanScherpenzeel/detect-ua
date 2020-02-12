@@ -63,7 +63,8 @@ export class DetectUA {
         !this.isTablet &&
         (/[^-]mobi/i.test(this.userAgent) ||
           // iPhone / iPod
-          (this.iOS === 'iphone' || this.iOS === 'ipod') ||
+          this.iOS === 'iphone' ||
+          this.iOS === 'ipod' ||
           // Android
           this.android ||
           // Nexus mobile
@@ -136,12 +137,16 @@ export class DetectUA {
       return cached;
     } else {
       if (this.iOS) {
-        return {
+        const result = {
           name: 'iOS',
           version:
             this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.') ||
             this.match(1, /version\/(\d+(\.\d+)?)/i),
         };
+
+        this.cache.set('iOS', result);
+
+        return result;
       } else {
         return false;
       }
@@ -158,10 +163,14 @@ export class DetectUA {
       return cached;
     } else {
       if (this.android) {
-        return {
+        const result = {
           name: 'Android',
           version: this.match(1, /android[ \/-](\d+(\.\d+)*)/i),
         };
+
+        this.cache.set('Android', result);
+
+        return result;
       } else {
         return false;
       }
