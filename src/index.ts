@@ -11,7 +11,6 @@ export class DetectUA {
   public userAgent: string;
 
   // Internal variables, prevents multiple lookups
-  // TODO: nicer way to handle these variables
   private isAndroidDevice: boolean;
   private iOSDevice: string;
 
