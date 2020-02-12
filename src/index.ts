@@ -50,6 +50,73 @@ export class DetectUA {
     return (match && match.length > 1 && match[position]) || '';
   }
 
+  private getMacOSVersionName = (version: string): string => {
+    const versionName = version
+      .split('.')
+      .splice(0, 2)
+      .map((versionNumbers: string): number => parseInt(versionNumbers, 10) || 0);
+
+    versionName.push(0);
+
+    if (versionName[0] !== 10) {
+      return '';
+    }
+
+    switch (versionName[1]) {
+      case 5:
+        return 'Leopard';
+      case 6:
+        return 'Snow Leopard';
+      case 7:
+        return 'Lion';
+      case 8:
+        return 'Mountain Lion';
+      case 9:
+        return 'Mavericks';
+      case 10:
+        return 'Yosemite';
+      case 11:
+        return 'El Capitan';
+      case 12:
+        return 'Sierra';
+      case 13:
+        return 'High Sierra';
+      case 14:
+        return 'Mojave';
+      case 15:
+        return 'Catalina';
+      default:
+        return '';
+    }
+  };
+
+  private getWindowsVersionName = (version: string): string => {
+    switch (version) {
+      case 'NT':
+        return 'NT';
+      case 'XP':
+        return 'XP';
+      case 'NT 5.0':
+        return '2000';
+      case 'NT 5.1':
+        return 'XP';
+      case 'NT 5.2':
+        return '2003';
+      case 'NT 6.0':
+        return 'Vista';
+      case 'NT 6.1':
+        return '7';
+      case 'NT 6.2':
+        return '8';
+      case 'NT 6.3':
+        return '8.1';
+      case 'NT 10.0':
+        return '10';
+      default:
+        return '';
+    }
+  };
+
   /**
    * Returns if the device is a mobile device
    */
@@ -59,8 +126,7 @@ export class DetectUA {
     if (cached !== undefined) {
       return cached;
     } else {
-      if (
-        // Default mobile
+      const result = // Default mobile
         !this.isTablet &&
         (/[^-]mobi/i.test(this.userAgent) ||
           // iPhone / iPod
@@ -69,16 +135,11 @@ export class DetectUA {
           // Android
           this.android ||
           // Nexus mobile
-          /nexus\s*[0-6]\s*/i.test(this.userAgent))
-      ) {
-        this.cache.set('isMobile', true);
+          /nexus\s*[0-6]\s*/i.test(this.userAgent));
 
-        return true;
-      }
+      this.cache.set('isMobile', result);
 
-      this.cache.set('isMobile', false);
-
-      return false;
+      return result;
     }
   }
 
@@ -91,24 +152,18 @@ export class DetectUA {
     if (cached !== undefined) {
       return cached;
     } else {
-      if (
-        // Default tablet
+      const result = // Default tablet
         (/tablet/i.test(this.userAgent) && !/tablet pc/i.test(this.userAgent)) ||
         // iPad
         this.iOS === 'ipad' ||
         // Android
         (this.android && !/[^-]mobi/i.test(this.userAgent)) ||
         // Nexus tablet
-        (!/nexus\s*[0-6]\s*/i.test(this.userAgent) && /nexus\s*[0-9]+/i.test(this.userAgent))
-      ) {
-        this.cache.set('isTablet', true);
+        (!/nexus\s*[0-6]\s*/i.test(this.userAgent) && /nexus\s*[0-9]+/i.test(this.userAgent));
 
-        return true;
-      }
+      this.cache.set('isTablet', result);
 
-      this.cache.set('isTablet', false);
-
-      return false;
+      return result;
     }
   }
 
@@ -122,6 +177,7 @@ export class DetectUA {
       return cached;
     } else {
       const result = !this.isMobile && !this.isTablet;
+
       this.cache.set('isDesktop', result);
 
       return result;
@@ -137,59 +193,16 @@ export class DetectUA {
     if (cached !== undefined) {
       return cached;
     } else {
-      if (/macintosh/i.test(this.userAgent)) {
-        const getMacOSVersionName = (version: string): string => {
-          const v = version
-            .split('.')
-            .splice(0, 2)
-            .map(s => parseInt(s, 10) || 0);
-          v.push(0);
+      const result = /macintosh/i.test(this.userAgent) && {
+        name: 'MacOS',
+        version: this.getMacOSVersionName(
+          this.match(1, /mac os x (\d+(\.?_?\d+)+)/i).replace(/[_\s]/g, '.')
+        ),
+      };
 
-          if (v[0] !== 10) {
-            return '';
-          }
+      this.cache.set('isMacOS', result);
 
-          switch (v[1]) {
-            case 5:
-              return 'Leopard';
-            case 6:
-              return 'Snow Leopard';
-            case 7:
-              return 'Lion';
-            case 8:
-              return 'Mountain Lion';
-            case 9:
-              return 'Mavericks';
-            case 10:
-              return 'Yosemite';
-            case 11:
-              return 'El Capitan';
-            case 12:
-              return 'Sierra';
-            case 13:
-              return 'High Sierra';
-            case 14:
-              return 'Mojave';
-            case 15:
-              return 'Catalina';
-            default:
-              return '';
-          }
-        };
-
-        const result = {
-          name: 'MacOS',
-          version: getMacOSVersionName(
-            this.match(1, /mac os x (\d+(\.?_?\d+)+)/i).replace(/[_\s]/g, '.')
-          ),
-        };
-
-        return result;
-      }
-
-      this.cache.set('isMacOS', false);
-
-      return false;
+      return result;
     }
   }
 
@@ -202,47 +215,14 @@ export class DetectUA {
     if (cached !== undefined) {
       return cached;
     } else {
-      if (/windows /i.test(this.userAgent)) {
-        const getWindowsVersionName = (version: string): string => {
-          switch (version) {
-            case 'NT':
-              return 'NT';
-            case 'XP':
-              return 'XP';
-            case 'NT 5.0':
-              return '2000';
-            case 'NT 5.1':
-              return 'XP';
-            case 'NT 5.2':
-              return '2003';
-            case 'NT 6.0':
-              return 'Vista';
-            case 'NT 6.1':
-              return '7';
-            case 'NT 6.2':
-              return '8';
-            case 'NT 6.3':
-              return '8.1';
-            case 'NT 10.0':
-              return '10';
-            default:
-              return '';
-          }
-        };
+      const result = /windows /i.test(this.userAgent) && {
+        name: 'Windows',
+        version: this.getWindowsVersionName(this.match(1, /Windows ((NT|XP)( \d\d?.\d)?)/i)),
+      };
 
-        const result = {
-          name: 'Windows',
-          version: getWindowsVersionName(this.match(1, /Windows ((NT|XP)( \d\d?.\d)?)/i)),
-        };
+      this.cache.set('isWindows', result);
 
-        this.cache.set('isWindows', result);
-
-        return result;
-      }
-
-      this.cache.set('isWindows', false);
-
-      return false;
+      return result;
     }
   }
 
@@ -255,22 +235,16 @@ export class DetectUA {
     if (cached !== undefined) {
       return cached;
     } else {
-      if (this.iOS) {
-        const result = {
-          name: 'iOS',
-          version:
-            this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.') ||
-            this.match(1, /version\/(\d+(\.\d+)?)/i),
-        };
+      const result = !!this.iOS && {
+        name: 'iOS',
+        version:
+          this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.') ||
+          this.match(1, /version\/(\d+(\.\d+)?)/i),
+      };
 
-        this.cache.set('iOS', result);
+      this.cache.set('isiOS', result);
 
-        return result;
-      } else {
-        this.cache.set('iOS', false);
-
-        return false;
-      }
+      return result;
     }
   }
 
@@ -283,18 +257,14 @@ export class DetectUA {
     if (cached !== undefined) {
       return cached;
     } else {
-      if (this.android) {
-        const result = {
-          name: 'Android',
-          version: this.match(1, /android[ \/-](\d+(\.\d+)*)/i),
-        };
+      const result = this.android && {
+        name: 'Android',
+        version: this.match(1, /android[ \/-](\d+(\.\d+)*)/i),
+      };
 
-        this.cache.set('Android', result);
+      this.cache.set('isAndroid', result);
 
-        return result;
-      } else {
-        return false;
-      }
+      return result;
     }
   }
 

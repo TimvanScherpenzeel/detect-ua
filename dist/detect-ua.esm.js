@@ -7,6 +7,68 @@ var DetectUA = /** @class */ (function () {
     function DetectUA(forceUserAgent) {
         // Internal cache, prevents from doing the same computations twice
         this.cache = new Map();
+        this.getMacOSVersionName = function (version) {
+            var versionName = version
+                .split('.')
+                .splice(0, 2)
+                .map(function (versionNumbers) { return parseInt(versionNumbers, 10) || 0; });
+            versionName.push(0);
+            if (versionName[0] !== 10) {
+                return '';
+            }
+            switch (versionName[1]) {
+                case 5:
+                    return 'Leopard';
+                case 6:
+                    return 'Snow Leopard';
+                case 7:
+                    return 'Lion';
+                case 8:
+                    return 'Mountain Lion';
+                case 9:
+                    return 'Mavericks';
+                case 10:
+                    return 'Yosemite';
+                case 11:
+                    return 'El Capitan';
+                case 12:
+                    return 'Sierra';
+                case 13:
+                    return 'High Sierra';
+                case 14:
+                    return 'Mojave';
+                case 15:
+                    return 'Catalina';
+                default:
+                    return '';
+            }
+        };
+        this.getWindowsVersionName = function (version) {
+            switch (version) {
+                case 'NT':
+                    return 'NT';
+                case 'XP':
+                    return 'XP';
+                case 'NT 5.0':
+                    return '2000';
+                case 'NT 5.1':
+                    return 'XP';
+                case 'NT 5.2':
+                    return '2003';
+                case 'NT 6.0':
+                    return 'Vista';
+                case 'NT 6.1':
+                    return '7';
+                case 'NT 6.2':
+                    return '8';
+                case 'NT 6.3':
+                    return '8.1';
+                case 'NT 10.0':
+                    return '10';
+                default:
+                    return '';
+            }
+        };
         this.userAgent = forceUserAgent
             ? forceUserAgent
             : window && window.navigator
@@ -42,9 +104,8 @@ var DetectUA = /** @class */ (function () {
                 return cached;
             }
             else {
-                if (
-                // Default mobile
-                !this.isTablet &&
+                var result = // Default mobile
+                 !this.isTablet &&
                     (/[^-]mobi/i.test(this.userAgent) ||
                         // iPhone / iPod
                         this.iOS === 'iphone' ||
@@ -52,12 +113,9 @@ var DetectUA = /** @class */ (function () {
                         // Android
                         this.android ||
                         // Nexus mobile
-                        /nexus\s*[0-6]\s*/i.test(this.userAgent))) {
-                    this.cache.set('isMobile', true);
-                    return true;
-                }
-                this.cache.set('isMobile', false);
-                return false;
+                        /nexus\s*[0-6]\s*/i.test(this.userAgent));
+                this.cache.set('isMobile', result);
+                return result;
             }
         },
         enumerable: true,
@@ -73,20 +131,16 @@ var DetectUA = /** @class */ (function () {
                 return cached;
             }
             else {
-                if (
-                // Default tablet
-                (/tablet/i.test(this.userAgent) && !/tablet pc/i.test(this.userAgent)) ||
+                var result = // Default tablet
+                 (/tablet/i.test(this.userAgent) && !/tablet pc/i.test(this.userAgent)) ||
                     // iPad
                     this.iOS === 'ipad' ||
                     // Android
                     (this.android && !/[^-]mobi/i.test(this.userAgent)) ||
                     // Nexus tablet
-                    (!/nexus\s*[0-6]\s*/i.test(this.userAgent) && /nexus\s*[0-9]+/i.test(this.userAgent))) {
-                    this.cache.set('isTablet', true);
-                    return true;
-                }
-                this.cache.set('isTablet', false);
-                return false;
+                    (!/nexus\s*[0-6]\s*/i.test(this.userAgent) && /nexus\s*[0-9]+/i.test(this.userAgent));
+                this.cache.set('isTablet', result);
+                return result;
             }
         },
         enumerable: true,
@@ -120,51 +174,12 @@ var DetectUA = /** @class */ (function () {
                 return cached;
             }
             else {
-                if (/macintosh/i.test(this.userAgent)) {
-                    var getMacOSVersionName = function (version) {
-                        var v = version
-                            .split('.')
-                            .splice(0, 2)
-                            .map(function (s) { return parseInt(s, 10) || 0; });
-                        v.push(0);
-                        if (v[0] !== 10) {
-                            return '';
-                        }
-                        switch (v[1]) {
-                            case 5:
-                                return 'Leopard';
-                            case 6:
-                                return 'Snow Leopard';
-                            case 7:
-                                return 'Lion';
-                            case 8:
-                                return 'Mountain Lion';
-                            case 9:
-                                return 'Mavericks';
-                            case 10:
-                                return 'Yosemite';
-                            case 11:
-                                return 'El Capitan';
-                            case 12:
-                                return 'Sierra';
-                            case 13:
-                                return 'High Sierra';
-                            case 14:
-                                return 'Mojave';
-                            case 15:
-                                return 'Catalina';
-                            default:
-                                return '';
-                        }
-                    };
-                    var result = {
-                        name: 'MacOS',
-                        version: getMacOSVersionName(this.match(1, /mac os x (\d+(\.?_?\d+)+)/i).replace(/[_\s]/g, '.')),
-                    };
-                    return result;
-                }
-                this.cache.set('isMacOS', false);
-                return false;
+                var result = /macintosh/i.test(this.userAgent) && {
+                    name: 'MacOS',
+                    version: this.getMacOSVersionName(this.match(1, /mac os x (\d+(\.?_?\d+)+)/i).replace(/[_\s]/g, '.')),
+                };
+                this.cache.set('isMacOS', result);
+                return result;
             }
         },
         enumerable: true,
@@ -180,42 +195,12 @@ var DetectUA = /** @class */ (function () {
                 return cached;
             }
             else {
-                if (/windows /i.test(this.userAgent)) {
-                    var getWindowsVersionName = function (version) {
-                        switch (version) {
-                            case 'NT':
-                                return 'NT';
-                            case 'XP':
-                                return 'XP';
-                            case 'NT 5.0':
-                                return '2000';
-                            case 'NT 5.1':
-                                return 'XP';
-                            case 'NT 5.2':
-                                return '2003';
-                            case 'NT 6.0':
-                                return 'Vista';
-                            case 'NT 6.1':
-                                return '7';
-                            case 'NT 6.2':
-                                return '8';
-                            case 'NT 6.3':
-                                return '8.1';
-                            case 'NT 10.0':
-                                return '10';
-                            default:
-                                return '';
-                        }
-                    };
-                    var result = {
-                        name: 'Windows',
-                        version: getWindowsVersionName(this.match(1, /Windows ((NT|XP)( \d\d?.\d)?)/i)),
-                    };
-                    this.cache.set('isWindows', result);
-                    return result;
-                }
-                this.cache.set('isWindows', false);
-                return false;
+                var result = /windows /i.test(this.userAgent) && {
+                    name: 'Windows',
+                    version: this.getWindowsVersionName(this.match(1, /Windows ((NT|XP)( \d\d?.\d)?)/i)),
+                };
+                this.cache.set('isWindows', result);
+                return result;
             }
         },
         enumerable: true,
@@ -231,19 +216,13 @@ var DetectUA = /** @class */ (function () {
                 return cached;
             }
             else {
-                if (this.iOS) {
-                    var result = {
-                        name: 'iOS',
-                        version: this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.') ||
-                            this.match(1, /version\/(\d+(\.\d+)?)/i),
-                    };
-                    this.cache.set('iOS', result);
-                    return result;
-                }
-                else {
-                    this.cache.set('iOS', false);
-                    return false;
-                }
+                var result = !!this.iOS && {
+                    name: 'iOS',
+                    version: this.match(1, /os (\d+([_\s]\d+)*) like mac os x/i).replace(/[_\s]/g, '.') ||
+                        this.match(1, /version\/(\d+(\.\d+)?)/i),
+                };
+                this.cache.set('isiOS', result);
+                return result;
             }
         },
         enumerable: true,
@@ -259,17 +238,12 @@ var DetectUA = /** @class */ (function () {
                 return cached;
             }
             else {
-                if (this.android) {
-                    var result = {
-                        name: 'Android',
-                        version: this.match(1, /android[ \/-](\d+(\.\d+)*)/i),
-                    };
-                    this.cache.set('Android', result);
-                    return result;
-                }
-                else {
-                    return false;
-                }
+                var result = this.android && {
+                    name: 'Android',
+                    version: this.match(1, /android[ \/-](\d+(\.\d+)*)/i),
+                };
+                this.cache.set('isAndroid', result);
+                return result;
             }
         },
         enumerable: true,

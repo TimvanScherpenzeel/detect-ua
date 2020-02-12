@@ -19,6 +19,8 @@ export declare class DetectUA {
      * @param pattern regular expression pattern
      */
     private match;
+    private getMacOSVersionName;
+    private getWindowsVersionName;
     /**
      * Returns if the device is a mobile device
      */
