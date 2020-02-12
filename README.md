@@ -3,7 +3,7 @@
 ![](http://img.badgesize.io/TimvanScherpenzeel/detect-ua/master/dist/detect-ua.cjs.js.svg?compression=gzip&maxAge=60)
 [![npm version](https://badge.fury.io/js/detect-ua.svg)](https://badge.fury.io/js/detect-ua)
 
-A small user-agent detection library (1 kB).
+A small user-agent detection library (1.5 kB).
 
 Is able to differentiate between mobile, tablet and desktop devices and finds your browser name and version.
 
