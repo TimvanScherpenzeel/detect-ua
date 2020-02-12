@@ -38,7 +38,7 @@ var DetectUA = /** @class */ (function () {
          */
         get: function () {
             var cached = this.cache.get('isMobile');
-            if (cached) {
+            if (cached !== undefined) {
                 return cached;
             }
             else {
@@ -69,7 +69,7 @@ var DetectUA = /** @class */ (function () {
          */
         get: function () {
             var cached = this.cache.get('isTablet');
-            if (cached) {
+            if (cached !== undefined) {
                 return cached;
             }
             else {
@@ -98,7 +98,7 @@ var DetectUA = /** @class */ (function () {
          */
         get: function () {
             var cached = this.cache.get('isDesktop');
-            if (cached) {
+            if (cached !== undefined) {
                 return cached;
             }
             else {
@@ -110,13 +110,124 @@ var DetectUA = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(DetectUA.prototype, "isMacOS", {
+        /**
+         * Returns if the device is running MacOS (and if so which version)
+         */
+        get: function () {
+            var cached = this.cache.get('isMacOS');
+            if (cached !== undefined) {
+                return cached;
+            }
+            else {
+                if (/macintosh/i.test(this.userAgent)) {
+                    var getMacOSVersionName = function (version) {
+                        var v = version
+                            .split('.')
+                            .splice(0, 2)
+                            .map(function (s) { return parseInt(s, 10) || 0; });
+                        v.push(0);
+                        if (v[0] !== 10) {
+                            return '';
+                        }
+                        switch (v[1]) {
+                            case 5:
+                                return 'Leopard';
+                            case 6:
+                                return 'Snow Leopard';
+                            case 7:
+                                return 'Lion';
+                            case 8:
+                                return 'Mountain Lion';
+                            case 9:
+                                return 'Mavericks';
+                            case 10:
+                                return 'Yosemite';
+                            case 11:
+                                return 'El Capitan';
+                            case 12:
+                                return 'Sierra';
+                            case 13:
+                                return 'High Sierra';
+                            case 14:
+                                return 'Mojave';
+                            case 15:
+                                return 'Catalina';
+                            default:
+                                return '';
+                        }
+                    };
+                    var result = {
+                        name: 'MacOS',
+                        version: getMacOSVersionName(this.match(1, /mac os x (\d+(\.?_?\d+)+)/i).replace(/[_\s]/g, '.')),
+                    };
+                    return result;
+                }
+                this.cache.set('isMacOS', false);
+                return false;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DetectUA.prototype, "isWindows", {
+        /**
+         * Returns if the device is running Windows (and if so which version)
+         */
+        get: function () {
+            var cached = this.cache.get('isMacOS');
+            if (cached !== undefined) {
+                return cached;
+            }
+            else {
+                if (/windows /i.test(this.userAgent)) {
+                    var getWindowsVersionName = function (version) {
+                        switch (version) {
+                            case 'NT':
+                                return 'NT';
+                            case 'XP':
+                                return 'XP';
+                            case 'NT 5.0':
+                                return '2000';
+                            case 'NT 5.1':
+                                return 'XP';
+                            case 'NT 5.2':
+                                return '2003';
+                            case 'NT 6.0':
+                                return 'Vista';
+                            case 'NT 6.1':
+                                return '7';
+                            case 'NT 6.2':
+                                return '8';
+                            case 'NT 6.3':
+                                return '8.1';
+                            case 'NT 10.0':
+                                return '10';
+                            default:
+                                return '';
+                        }
+                    };
+                    var result = {
+                        name: 'Windows',
+                        version: getWindowsVersionName(this.match(1, /Windows ((NT|XP)( \d\d?.\d)?)/i)),
+                    };
+                    this.cache.set('isWindows', result);
+                    return result;
+                }
+                this.cache.set('isWindows', false);
+                return false;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(DetectUA.prototype, "isiOS", {
         /**
-         * Returns if the device is an iOS device
+         * Returns if the device is an iOS device (and if so which version)
          */
         get: function () {
             var cached = this.cache.get('isiOS');
-            if (cached) {
+            if (cached !== undefined) {
                 return cached;
             }
             else {
@@ -130,6 +241,7 @@ var DetectUA = /** @class */ (function () {
                     return result;
                 }
                 else {
+                    this.cache.set('iOS', false);
                     return false;
                 }
             }
@@ -139,11 +251,11 @@ var DetectUA = /** @class */ (function () {
     });
     Object.defineProperty(DetectUA.prototype, "isAndroid", {
         /**
-         * Returns if the device is an Android device
+         * Returns if the device is an Android device (and if so which version)
          */
         get: function () {
             var cached = this.cache.get('isAndroid');
-            if (cached) {
+            if (cached !== undefined) {
                 return cached;
             }
             else {
@@ -169,7 +281,7 @@ var DetectUA = /** @class */ (function () {
          */
         get: function () {
             var cached = this.cache.get('browser');
-            if (cached) {
+            if (cached !== undefined) {
                 return cached;
             }
             else {
@@ -217,11 +329,11 @@ var DetectUA = /** @class */ (function () {
                         version: this.match(1, /(?:msie |rv:)(\d+(\.\d+)?)/i),
                     };
                 }
-                else if (/edg([ea]|ios)/i.test(this.userAgent)) {
+                else if (/(edge|edgios|edga|edg)/i.test(this.userAgent)) {
                     // Edge
                     result = {
                         name: 'Microsoft Edge',
-                        version: this.match(2, /edg([ea]|ios)\/(\d+(\.\d+)?)/i),
+                        version: this.match(2, /(edge|edgios|edga|edg)\/(\d+(\.\d+)?)/i),
                     };
                 }
                 else if (/firefox|iceweasel|fxios/i.test(this.userAgent)) {

@@ -32,11 +32,19 @@ export declare class DetectUA {
      */
     get isDesktop(): boolean;
     /**
-     * Returns if the device is an iOS device
+     * Returns if the device is running MacOS (and if so which version)
+     */
+    get isMacOS(): IResult | boolean;
+    /**
+     * Returns if the device is running Windows (and if so which version)
+     */
+    get isWindows(): IResult | boolean;
+    /**
+     * Returns if the device is an iOS device (and if so which version)
      */
     get isiOS(): IResult | boolean;
     /**
-     * Returns if the device is an Android device
+     * Returns if the device is an Android device (and if so which version)
      */
     get isAndroid(): IResult | boolean;
     /**

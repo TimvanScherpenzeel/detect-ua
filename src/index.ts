@@ -55,7 +55,7 @@ export class DetectUA {
   get isMobile(): boolean {
     const cached = this.cache.get('isMobile');
 
-    if (cached) {
+    if (cached !== undefined) {
       return cached;
     } else {
       if (
@@ -87,7 +87,7 @@ export class DetectUA {
   get isTablet(): boolean {
     const cached = this.cache.get('isTablet');
 
-    if (cached) {
+    if (cached !== undefined) {
       return cached;
     } else {
       if (
@@ -117,7 +117,7 @@ export class DetectUA {
   get isDesktop(): boolean {
     const cached = this.cache.get('isDesktop');
 
-    if (cached) {
+    if (cached !== undefined) {
       return cached;
     } else {
       const result = !this.isMobile && !this.isTablet;
@@ -128,12 +128,130 @@ export class DetectUA {
   }
 
   /**
-   * Returns if the device is an iOS device
+   * Returns if the device is running MacOS (and if so which version)
+   */
+  get isMacOS(): IResult | boolean {
+    const cached = this.cache.get('isMacOS');
+
+    if (cached !== undefined) {
+      return cached;
+    } else {
+      if (/macintosh/i.test(this.userAgent)) {
+        const getMacOSVersionName = (version: string): string => {
+          const v = version
+            .split('.')
+            .splice(0, 2)
+            .map(s => parseInt(s, 10) || 0);
+          v.push(0);
+
+          if (v[0] !== 10) {
+            return '';
+          }
+
+          switch (v[1]) {
+            case 5:
+              return 'Leopard';
+            case 6:
+              return 'Snow Leopard';
+            case 7:
+              return 'Lion';
+            case 8:
+              return 'Mountain Lion';
+            case 9:
+              return 'Mavericks';
+            case 10:
+              return 'Yosemite';
+            case 11:
+              return 'El Capitan';
+            case 12:
+              return 'Sierra';
+            case 13:
+              return 'High Sierra';
+            case 14:
+              return 'Mojave';
+            case 15:
+              return 'Catalina';
+            default:
+              return '';
+          }
+        };
+
+        const result = {
+          name: 'MacOS',
+          version: getMacOSVersionName(
+            this.match(1, /mac os x (\d+(\.?_?\d+)+)/i).replace(/[_\s]/g, '.')
+          ),
+        };
+
+        return result;
+      }
+
+      this.cache.set('isMacOS', false);
+
+      return false;
+    }
+  }
+
+  /**
+   * Returns if the device is running Windows (and if so which version)
+   */
+  get isWindows(): IResult | boolean {
+    const cached = this.cache.get('isMacOS');
+
+    if (cached !== undefined) {
+      return cached;
+    } else {
+      if (/windows /i.test(this.userAgent)) {
+        const getWindowsVersionName = (version: string): string => {
+          switch (version) {
+            case 'NT':
+              return 'NT';
+            case 'XP':
+              return 'XP';
+            case 'NT 5.0':
+              return '2000';
+            case 'NT 5.1':
+              return 'XP';
+            case 'NT 5.2':
+              return '2003';
+            case 'NT 6.0':
+              return 'Vista';
+            case 'NT 6.1':
+              return '7';
+            case 'NT 6.2':
+              return '8';
+            case 'NT 6.3':
+              return '8.1';
+            case 'NT 10.0':
+              return '10';
+            default:
+              return '';
+          }
+        };
+
+        const result = {
+          name: 'Windows',
+          version: getWindowsVersionName(this.match(1, /Windows ((NT|XP)( \d\d?.\d)?)/i)),
+        };
+
+        this.cache.set('isWindows', result);
+
+        return result;
+      }
+
+      this.cache.set('isWindows', false);
+
+      return false;
+    }
+  }
+
+  /**
+   * Returns if the device is an iOS device (and if so which version)
    */
   get isiOS(): IResult | boolean {
     const cached = this.cache.get('isiOS');
 
-    if (cached) {
+    if (cached !== undefined) {
       return cached;
     } else {
       if (this.iOS) {
@@ -148,18 +266,20 @@ export class DetectUA {
 
         return result;
       } else {
+        this.cache.set('iOS', false);
+
         return false;
       }
     }
   }
 
   /**
-   * Returns if the device is an Android device
+   * Returns if the device is an Android device (and if so which version)
    */
   get isAndroid(): IResult | boolean {
     const cached = this.cache.get('isAndroid');
 
-    if (cached) {
+    if (cached !== undefined) {
       return cached;
     } else {
       if (this.android) {
@@ -183,7 +303,7 @@ export class DetectUA {
   get browser(): IResult | boolean {
     const cached = this.cache.get('browser');
 
-    if (cached) {
+    if (cached !== undefined) {
       return cached;
     } else {
       const versionIdentifier = this.match(1, /version\/(\d+(\.\d+)?)/i);
@@ -225,11 +345,11 @@ export class DetectUA {
           name: 'Internet Explorer',
           version: this.match(1, /(?:msie |rv:)(\d+(\.\d+)?)/i),
         };
-      } else if (/edg([ea]|ios)/i.test(this.userAgent)) {
+      } else if (/(edge|edgios|edga|edg)/i.test(this.userAgent)) {
         // Edge
         result = {
           name: 'Microsoft Edge',
-          version: this.match(2, /edg([ea]|ios)\/(\d+(\.\d+)?)/i),
+          version: this.match(2, /(edge|edgios|edga|edg)\/(\d+(\.\d+)?)/i),
         };
       } else if (/firefox|iceweasel|fxios/i.test(this.userAgent)) {
         // Firefox
