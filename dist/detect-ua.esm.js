@@ -6,6 +6,7 @@ var DetectUA = /** @class */ (function () {
      */
     function DetectUA(forceUserAgent) {
         // Internal cache, prevents from doing the same computations twice
+        // TODO: potentially instantiate Map with entries with undefined values
         this.cache = new Map();
         this.userAgent = forceUserAgent
             ? forceUserAgent
@@ -37,6 +38,7 @@ var DetectUA = /** @class */ (function () {
          * Returns if the device is a mobile device
          */
         get: function () {
+            // TODO: further codegolf the caching / memoization (or abstract it into a seperate method)
             var cached = this.cache.get('isMobile');
             if (cached !== undefined) {
                 return cached;

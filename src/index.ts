@@ -11,10 +11,12 @@ export class DetectUA {
   public userAgent: string;
 
   // Internal variables, prevents multiple lookups
+  // TODO: nicer way to handle these variables
   private android: boolean;
   private iOS: string;
 
   // Internal cache, prevents from doing the same computations twice
+  // TODO: potentially instantiate Map with entries with undefined values
   private cache: Map<string, any> = new Map();
 
   /**
@@ -58,6 +60,7 @@ export class DetectUA {
    * Returns if the device is a mobile device
    */
   get isMobile(): boolean {
+    // TODO: further codegolf the caching / memoization (or abstract it into a seperate method)
     const cached = this.cache.get('isMobile');
 
     if (cached !== undefined) {
