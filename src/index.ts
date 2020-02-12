@@ -6,6 +6,7 @@ export interface IResult {
 export class DetectUA {
   public userAgent: string;
 
+  // Internal variables, prevents multiple lookups
   private android: boolean;
   private iOS: string;
 
