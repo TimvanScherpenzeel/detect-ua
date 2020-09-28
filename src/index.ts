@@ -1,3 +1,5 @@
+const isServer = typeof window === 'undefined';
+
 export interface IDeviceResult {
   version: string;
 }
@@ -22,7 +24,7 @@ export class DetectUA {
   constructor(forceUserAgent?: string) {
     this.userAgent = forceUserAgent
       ? forceUserAgent
-      : window && window.navigator
+      : !isServer && window.navigator
       ? window.navigator.userAgent
       : '';
 
@@ -33,6 +35,7 @@ export class DetectUA {
     // SEE: https://github.com/lancedikson/bowser/issues/329
     // SEE: https://stackoverflow.com/questions/58019463/how-to-detect-device-name-in-safari-on-ios-13-while-it-doesnt-show-the-correct
     if (
+      !isServer &&
       navigator.platform === 'MacIntel' &&
       navigator.maxTouchPoints > 2 &&
       !(window as any).MSStream
