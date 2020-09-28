@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DetectUA = void 0;
+var isSSR = typeof window === 'undefined';
 var DetectUA = /** @class */ (function () {
     /**
      * Detect a users browser, browser version and whether it is a mobile-, tablet- or desktop device
@@ -10,7 +11,7 @@ var DetectUA = /** @class */ (function () {
     function DetectUA(forceUserAgent) {
         this.userAgent = forceUserAgent
             ? forceUserAgent
-            : window && window.navigator
+            : !isSSR && window.navigator
                 ? window.navigator.userAgent
                 : '';
         this.isAndroidDevice = !/like android/i.test(this.userAgent) && /android/i.test(this.userAgent);
@@ -18,7 +19,8 @@ var DetectUA = /** @class */ (function () {
         // Workaround for ipadOS, force detection as tablet
         // SEE: https://github.com/lancedikson/bowser/issues/329
         // SEE: https://stackoverflow.com/questions/58019463/how-to-detect-device-name-in-safari-on-ios-13-while-it-doesnt-show-the-correct
-        if (navigator.platform === 'MacIntel' &&
+        if (!isSSR &&
+            navigator.platform === 'MacIntel' &&
             navigator.maxTouchPoints > 2 &&
             !window.MSStream) {
             this.iOSDevice = 'ipad';
